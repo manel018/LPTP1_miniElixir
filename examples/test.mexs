@@ -1,0 +1,6 @@
+y = 5
+unless :false do
+  y = 7
+end
+
+y

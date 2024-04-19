@@ -1,0 +1,37 @@
+# Read frequencies from the user.
+input = fn ->
+  khz = read("Entre com uma frequencia em kHz: ")
+  cond do
+    khz == "" -> []
+    :true     -> [int(khz)] ++ input()
+  end
+end
+
+# Generate stats for frequencies.
+stats = fn freqs ->
+  head = hd(freqs)
+  if head == :error do
+    [:nil, :nil]
+  else
+    [min, max] = stats(tl(freqs))
+    [if (min == :nil) || (head < min) do head else min end,
+     if (max == :nil) || (head > max) do head else max end]
+  end
+end
+
+# Print frequencies.
+show = fn msg, freqs ->
+  unless length(freqs) == 0 do
+    puts(msg)
+    [min, max] = stats(freqs)
+    puts("  Min: " <> str(min))
+    puts("  Max: " <> str(max))
+  end
+end
+
+freqs = input()
+low_freqs = for f <- freqs, f < 300 do f end
+show("Frequencias baixas: ", low_freqs)
+
+high_freq = freqs -- low_freqs
+show("Frequencias altas: ", high_freq)
