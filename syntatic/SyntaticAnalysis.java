@@ -125,9 +125,9 @@ public class SyntaticAnalysis {
     // <code> ::= { <expr> }
     private ExprBlock procCode() {
         ExprBlock block = new ExprBlock(current.line);
-        while (check(NOT, SUB, OPEN_PAR, INTEGER_LITERAL, STRING_LITERAL,
-                ATOM_LITERAL, OPEN_BRA, OPEN_CUR, IF, UNLESS, COND, FOR,
-                FN, PUTS, READ, INT, STR, LENGTH, HD, TL, AT, REM, NAME)) {
+        while (check(Token.Type.NOT, Token.Type.SUB, Token.Type.OPEN_PAR, Token.Type.INTEGER_LITERAL, Token.Type.STRING_LITERAL,
+                Token.Type.ATOM_LITERAL, Token.Type.OPEN_BRA, Token.Type.OPEN_CUR, Token.Type.IF, Token.Type.UNLESS, Token.Type.COND, Token.Type.FOR,
+                Token.Type.FN, Token.Type.PUTS, Token.Type.READ, Token.Type.INT, Token.Type.STR, Token.Type.LENGTH, Token.Type.HD, Token.Type.TL, Token.Type.AT, Token.Type.REM, Token.Type.NAME)) {
             Expr expr = procExpr();
             block.addExpr(expr);
         }
@@ -273,15 +273,7 @@ public class SyntaticAnalysis {
             procTuple();
         } else if (check(IF)) {
             procIf();
-        } else if (check(UNLESS)) {
-            expr = procUnless();
-        } else if (check(COND)) {
-            procCond();
-        } else if (check(FOR)) {
-            procFor();
-        } else if (check(FN)) {
-            procFn();
-        } else if (check(PUTS, READ, INT, STR, LENGTH, HD, TL, AT, REM)) {
+        } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
             procNative();
         } else if (check(NAME)) {
             expr = procName();
@@ -386,7 +378,7 @@ public class SyntaticAnalysis {
 
     // <native> ::= puts | read | int | str | length | hd | tl | at | rem
     private void procNative() {
-        if (match(PUTS, READ, INT, STR, LENGTH, HD, TL, AT, REM)) {
+        if (match(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
             // Do nothing.
         } else {
             reportError();

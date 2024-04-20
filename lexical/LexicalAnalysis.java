@@ -287,7 +287,7 @@ public class LexicalAnalysis implements AutoCloseable {
                 default:
                     throw new InternalException("Unreachable");
             }
-        }
+        } //Lexema formado
 
         if (state == 14)
             token.type = keywords.containsKey(token.lexeme) ?
