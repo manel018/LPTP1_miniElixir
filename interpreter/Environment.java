@@ -23,10 +23,14 @@ public class Environment {
         this.enclosing = enclosing;
     }
 
+    //Procura o Token do escopo mais interno para o mais externo e retorna seu valor
     public Value<?> get(Token name) {
         if (memory.containsKey(name.lexeme))
             return memory.get(name.lexeme);
-        else if (enclosing != null)
+
+        //'enclosing' igual a null significa que estamos no escopo mais externo do programa.
+        //Portanto, se o Token não for encontrado na memória do escopo mais externo, lança uma exceção    
+        else if (enclosing != null) 
             return enclosing.get(name);
         else
             throw LanguageException.instance(name.line, UndeclaredVariable, name.lexeme);

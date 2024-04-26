@@ -30,7 +30,10 @@ public class LanguageException extends RuntimeException {
     }
 
     public static LanguageException instance(int line, Error error, String ... args) {
+        //Verifica se a quantidade de argumentos passados é igual a quantidade de argumentos esperados para este tipo de Error
+        //Caso não seja, lança uma exceção
         assert error.args == args.length;
+        
         String msg = error.args == 0 ? error.msg : String.format(error.msg, (Object[]) args);
         return new LanguageException(line, msg);
     }

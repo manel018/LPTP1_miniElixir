@@ -6,6 +6,12 @@ import static error.LanguageException.Error.UnexpectedLexeme;
 import static lexical.Token.Type.ADD;
 import static lexical.Token.Type.AND;
 import static lexical.Token.Type.ASSIGN;
+import static lexical.Token.Type.LOWER_THAN;
+import static lexical.Token.Type.LOWER_EQUAL;
+import static lexical.Token.Type.GREATER_THAN;
+import static lexical.Token.Type.GREATER_EQUAL;
+import static lexical.Token.Type.EQUAL;
+import static lexical.Token.Type.NOT_EQUAL;
 import static lexical.Token.Type.AT;
 import static lexical.Token.Type.ATOM_LITERAL;
 import static lexical.Token.Type.CLOSE_BRA;
@@ -54,6 +60,7 @@ import interpreter.expr.ExprBlock;
 import interpreter.expr.UnaryExpr;
 import interpreter.expr.UnlessExpr;
 import interpreter.expr.Variable;
+import interpreter.expr.BinaryExpr.Op;
 import interpreter.value.Value;
 import lexical.LexicalAnalysis;
 import lexical.Token;
@@ -125,9 +132,9 @@ public class SyntaticAnalysis {
     // <code> ::= { <expr> }
     private ExprBlock procCode() {
         ExprBlock block = new ExprBlock(current.line);
-        while (check(Token.Type.NOT, Token.Type.SUB, Token.Type.OPEN_PAR, Token.Type.INTEGER_LITERAL, Token.Type.STRING_LITERAL,
-                Token.Type.ATOM_LITERAL, Token.Type.OPEN_BRA, Token.Type.OPEN_CUR, Token.Type.IF, Token.Type.UNLESS, Token.Type.COND, Token.Type.FOR,
-                Token.Type.FN, Token.Type.PUTS, Token.Type.READ, Token.Type.INT, Token.Type.STR, Token.Type.LENGTH, Token.Type.HD, Token.Type.TL, Token.Type.AT, Token.Type.REM, Token.Type.NAME)) {
+        while (check(NOT, SUB, OPEN_PAR, INTEGER_LITERAL, STRING_LITERAL,
+                ATOM_LITERAL, OPEN_BRA, OPEN_CUR, IF, UNLESS, COND, FOR,
+                FN, PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM, NAME)) {
             Expr expr = procExpr();
             block.addExpr(expr);
         }
@@ -161,8 +168,37 @@ public class SyntaticAnalysis {
     // <rel> ::= <subtract> [ ( '<' | '>' | '<=' | '>=' | '==' | '!=' ) <expr> ]
     private Expr procRel() {
         Expr expr = procSubtract();
+        if(match(LOWER_THAN, GREATER_THAN, LOWER_EQUAL, GREATER_EQUAL, EQUAL, NOT_EQUAL)){
+            BinaryExpr.Op op = null;
+            int line = previous.line;
+            switch (previous.type) {
+                case LOWER_THAN:
+                    op = BinaryExpr.Op.LowerThan;
+                    break;
+                case GREATER_THAN:
+                    op = BinaryExpr.Op.GreaterThan;
+                    break;
+                case LOWER_EQUAL:
+                    op = BinaryExpr.Op.LowerEqual;
+                    break;
+                case GREATER_EQUAL:
+                    op = BinaryExpr.Op.GreaterEqual;
+                    break;
+                case EQUAL:
+                    op = BinaryExpr.Op.Equal;
+                    break;
+                case NOT_EQUAL:
+                    op = BinaryExpr.Op.NotEqual;
+                    break;
+                default:
+                    reportError();
+                    break;
+            }
 
-        // TODO: implement me!
+            Expr right = procExpr();
+
+            expr = new BinaryExpr(line, expr, op, right);          
+        }
         return expr;
     }
 
@@ -170,7 +206,12 @@ public class SyntaticAnalysis {
     private Expr procSubtract() {
         Expr expr = procConcat();
         if (match(LIST_SUBTRACT)) {
-            procExpr();
+            BinaryExpr.Op op = BinaryExpr.Op.ListSubtract;
+            int line = previous.line;
+            
+            Expr right = procExpr();
+            
+            expr = new BinaryExpr(line, expr, op, right);
         }
 
         return expr;
@@ -178,22 +219,52 @@ public class SyntaticAnalysis {
 
     // <concat> ::= <arith> [ ( '++' | '<>' ) <expr> ]
     private Expr procConcat() {
-        Expr expr = procArith();
+        Expr left = procArith();
         if (match(LIST_CONCAT, STR_CONCAT)) {
-            procExpr();
+            BinaryExpr.Op op = null;
+            int line = previous.line;
+            switch(previous.type){
+                case LIST_CONCAT:
+                    op = BinaryExpr.Op.ListConcat;
+                    break;
+                case STR_CONCAT:
+                    op = BinaryExpr.Op.StringConcat;
+                    break;
+                default:
+                    reportError();
+            }
+
+            Expr right = procExpr();
+
+            left = new BinaryExpr(line, left, op, right);
         }
 
-        return expr;
+        return left;
     }
 
     // <arith> ::= <term> [ ( '+' | '-' ) <expr> ]
     private Expr procArith() {
-        Expr expr = procTerm();
+        Expr left = procTerm();
         if (match(ADD, SUB)) {
-            procExpr();
+            BinaryExpr.Op op = null;
+            int line = previous.line;
+            switch (previous.type) {
+                case ADD:
+                    op = BinaryExpr.Op.Add;
+                    break;
+                case SUB:
+                    op = BinaryExpr.Op.Sub;
+                    break;
+                default:
+                    reportError();
+            }
+
+            Expr right = procExpr();
+
+            left = new BinaryExpr(line, left, op, right);
         }
 
-        return expr;
+        return left;
     }
 
     // <term> ::= <prefix> [ ( '*' | '/' ) <expr> ]
@@ -249,7 +320,7 @@ public class SyntaticAnalysis {
 
     // <factor> ::= ( '(' <expr> ')' | <rvalue> ) <invoke>
     private Expr procFactor() {
-        Expr expr;
+        Expr expr = null;
         if (match(OPEN_PAR)) {
             expr = procExpr();
             eat(CLOSE_PAR);
@@ -273,6 +344,14 @@ public class SyntaticAnalysis {
             procTuple();
         } else if (check(IF)) {
             procIf();
+        } else if (check(UNLESS)) {
+            expr = procUnless();
+        } else if (check(COND)) {
+            procCond();
+        } else if (check(FOR)) {
+            procFor();
+        } else if (check(FN)) {
+            procFn();
         } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
             procNative();
         } else if (check(NAME)) {
@@ -386,8 +465,17 @@ public class SyntaticAnalysis {
     }
 
     // <invoke> ::= [ '(' [ <expr> { ',' <expr> } ] ')' ]
-    private void procInvoke() {
-        // TODO: implement me!
+    private Expr procInvoke() {
+        Expr expr = null;
+        if(match(OPEN_PAR)){
+            if(check(NOT, SUB, OPEN_PAR, INTEGER_LITERAL, STRING_LITERAL,
+            ATOM_LITERAL, OPEN_BRA, OPEN_CUR, IF, UNLESS, COND, FOR,
+            FN, PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM, NAME)) {
+                //TODO: Implement me!
+            }
+        }
+        return expr;
+        
     }
 
     private Variable procName() {

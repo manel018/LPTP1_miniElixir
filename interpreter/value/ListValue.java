@@ -36,6 +36,9 @@ public class ListValue extends Value<ListLiteral> {
 
     @Override
     public String toString() {
+        // Opção melhorada:
+        // return this.value.toString();
+
         StringBuffer sb = new StringBuffer();
         sb.append("[");
 

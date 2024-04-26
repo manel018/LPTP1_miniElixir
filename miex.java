@@ -9,6 +9,7 @@ import interpreter.Interpreter;
 import interpreter.expr.Expr;
 import interpreter.value.Value;
 import lexical.LexicalAnalysis;
+import lexical.Token;
 import syntatic.SyntaticAnalysis;
 
 public class miex {
@@ -41,7 +42,7 @@ public class miex {
                 System.out.println();
                 break;
             }
-
+            // TODO: Voltar output para false ao entregar o progrAma
             run(new ByteArrayInputStream(line.getBytes()), true);
         }
     }
@@ -60,9 +61,9 @@ public class miex {
                 lex = l.nextToken();
                 System.out.printf("%02d: (\"%s\", %s, %s)\n", lex.line,
                     lex.lexeme, lex.type, lex.literal);
-            } while (lex.type != END_OF_FILE &&
-                     lex.type != INVALID_TOKEN &&
-                     lex.type != UNEXPECTED_EOF);
+            } while (lex.type != Token.Type.END_OF_FILE &&
+                     lex.type != Token.Type.INVALID_TOKEN &&
+                     lex.type != Token.Type.UNEXPECTED_EOF);
             */
 
             // O código a seguir é dado para testar o interpretador.

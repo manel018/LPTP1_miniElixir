@@ -1,0 +1,30 @@
+#Este arquivo deverá ser excluído posteriormente
+
+Lista de observações e modificações a serem consideradas no código:
+
+
+- SyntaticlAnalysis.java
+    ❌ A constante STR está ambígua, de acordo com a mensagem do compilador.
+        ✅[CORRIGIDO] A referência a essa constante foi qualificada (o nome da classe e do atributo ao qual ela pertence está precedendo-a). Sua referência agora é Token.Type.STR .
+    ❌ Falta implementar o método ProcRel().
+        ✅[CORRIGIDO] método implementado.
+    
+
+- ListValue.java
+    ❌ Não é necessário reimplementar o método toString() na classe ListValue, porque seu atributo value (da classe ListLiteral) já o implementou.
+            
+
+- BinaryExpr.java
+    ❌ Falta implementar os métodos internos de operações relacionais (andOp, orOp, equalOp...).
+
+
+- miex.java
+    ❌ Definir output como 'false' quando for entregar o programa.
+        
+
+- interpreter/expr
+    ❌ Falta criar as classes ListExpr, TupleExpr, ForExpr, CondExpr, FunctionInvocationExpr e IfExpr.
+
+
+- interpreter/literal
+    ❌ Falta criar as classes FunctionLiteral, StandardFunctionLiteral, NativeFunctionLiteral.
