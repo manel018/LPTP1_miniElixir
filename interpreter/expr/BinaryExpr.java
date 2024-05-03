@@ -2,27 +2,30 @@ package interpreter.expr;
 
 import error.LanguageException;
 import interpreter.Environment;
+import interpreter.literal.AtomLiteral;
+import interpreter.value.AtomValue;
 import interpreter.value.IntValue;
+import interpreter.value.StringValue;
 import interpreter.value.Value;
 
 public class BinaryExpr extends Expr {
 
     public static enum Op {
-        And,
-        Or,
-        Equal,
-        NotEqual,
-        LowerThan,
-        LowerEqual,
-        GreaterThan,
-        GreaterEqual,
-        ListSubtract,
-        ListConcat,
-        StringConcat,
-        Add,
-        Sub,
-        Mul,
-        Div
+        And,            // &&
+        Or,             // ||
+        Equal,          // ==
+        NotEqual,       // !=
+        LowerThan,      // <
+        LowerEqual,     // <=
+        GreaterThan,    // >
+        GreaterEqual,   // >=
+        ListSubtract,   // --
+        ListConcat,     // ++
+        StringConcat,   // <>
+        Add,            // +
+        Sub,            // -
+        Mul,            // *
+        Div             // /
     }
 
     private Expr left;
@@ -76,55 +79,122 @@ public class BinaryExpr extends Expr {
     }
 
     private Value<?> andOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        // Retorna o valor do último termo avaliado na expressão
+        // Se v1 for falso, retorna v1
+        if(!v1.eval())
+            return v1;
+        else    // Se v1 for verdadeiro, retorna v2
+            return v2;
     }
 
     private Value<?> orOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        // Retorna o valor do último termo avaliado na expressão
+        // Se v1 for verdadeiro, retorna v1
+        if(v1.eval())
+            return v1;
+        else    // Se v1 for falso, retorna v2
+            return v2;
     }
 
     private Value<?> equalOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = left.expr(env);
+        Value<?> v2 = right.expr(env);
+
+        // Se o tipo forem diferentes, retorna :false
+        if(v1.getClass() != v2.getClass())
+            return AtomValue.FALSE;
+        else if(v1.equals(v2))
+            return AtomValue.TRUE;
+        else
+            return AtomValue.FALSE;
     }
 
     private Value<?> notEqualOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+        
+        // Se os tipos forem diferentes, retorna :false
+        if(v1.getClass() != v2.getClass())
+            return AtomValue.FALSE;
+        else if (!v1.equals(v2))
+            return AtomValue.TRUE;
+        else
+            return AtomValue.FALSE;
     }
 
     private Value<?> lowerThanOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        throw new RuntimeException("Implement me!2");
     }
 
     private Value<?> greaterThanOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        throw new RuntimeException("Implement me!3");
     }
 
     private Value<?> lowerEqualOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        throw new RuntimeException("Implement me!4");
     }
 
     private Value<?> greaterEqualOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        throw new RuntimeException("Implement me!5");
     }
 
     private Value<?> listSubtractOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        throw new RuntimeException("Implement me!6");
     }
 
     private Value<?> listConcatOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        throw new RuntimeException("Implement me!7");
     }
 
     private Value<?> stringConcatOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = left.expr(env);
+        Value<?> v2 = right.expr(env);
+
+        if (v1 instanceof StringValue && v2 instanceof StringValue){
+            StringValue sv1 = (StringValue) v1;
+            StringValue sv2 = (StringValue) v2;
+
+            String concat =  sv1.value() + sv2.value();
+
+            return new StringValue(concat);
+        } else
+            throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 
     private Value<?> addOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = left.expr(env);
+        Value<?> v2 = right.expr(env);
+
+        if(v1 instanceof IntValue && v2 instanceof IntValue){
+            IntValue iv1 = (IntValue) v1;
+            IntValue iv2 = (IntValue) v2;
+
+            int n = iv1.value() + iv2.value();
+
+            return new IntValue(n);
+        } else
+            throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 
     private Value<?> subOp(Environment env) {
-        throw new RuntimeException("Implement me!");
+        Value<?> v1 = left.expr(env);
+        Value<?> v2 = right.expr(env);
+
+        if (v1 instanceof IntValue && v2 instanceof IntValue){
+            IntValue iv1 = (IntValue) v1;
+            IntValue iv2 = (IntValue) v2;
+
+            int n = iv1.value() - iv2.value();
+
+            return new IntValue(n);
+        } else
+            throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 
     private Value<?> mulOp(Environment env) {
@@ -137,9 +207,8 @@ public class BinaryExpr extends Expr {
 
             int n = iv1.value() * iv2.value();
             return new IntValue(n);
-        } else {
+        } else
             throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
-        }
     }
 
     private Value<?> divOp(Environment env) {
@@ -152,9 +221,8 @@ public class BinaryExpr extends Expr {
 
             int n = iv1.value() / iv2.value();
             return new IntValue(n);
-        } else {
+        } else
             throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
-        }
     }
 
 }

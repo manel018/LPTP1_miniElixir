@@ -32,7 +32,7 @@ public class AtomValue extends Value<AtomLiteral> {
     @Override
     public boolean eval() {
         String atom = this.value.getAtom();
-        return !(atom.equals(":nil") || atom.equals(":false"));
+        return !(atom.equals(":nil") || atom.equals(":false") || atom.equals(":error"));
     }
 
     @Override

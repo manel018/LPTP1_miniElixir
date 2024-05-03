@@ -6,8 +6,16 @@ Lista de observações e modificações a serem consideradas no código:
 - SyntaticlAnalysis.java
     ❌ A constante STR está ambígua, de acordo com a mensagem do compilador.
         ✅[CORRIGIDO] A referência a essa constante foi qualificada (o nome da classe e do atributo ao qual ela pertence está precedendo-a). Sua referência agora é Token.Type.STR .
-    ❌ Falta implementar o método ProcRel().
-        ✅[CORRIGIDO] método implementado.
+    ❌ Falta implementar os métodos:
+        - procRel()  ✅[CORRIGIDO] Método implementado.
+        - procRValue()
+        - procList()
+        - procTuple()
+        - procIf()
+        - procCond()
+        - procFor()
+        - procFn()
+        - procNative()
     
 
 - ListValue.java
@@ -15,15 +23,40 @@ Lista de observações e modificações a serem consideradas no código:
             
 
 - BinaryExpr.java
-    ❌ Falta implementar os métodos internos de operações relacionais (andOp, orOp, equalOp...).
+    ❌ Falta implementar os métodos internos de operações relacionais:
+        - andOp()   ✅❓[CORRIGIDO] Método implementado. (O método retorna o último valor avaliado, não necessariamente 'false' ou 'true')
+        - orOp()   ✅❓[CORRIGIDO] Método implementado. (O método retorna o último valor avaliado, não necessariamente 'false' ou 'true')
+        - equalOp()   ✅[CORRIGIDO] Método implementado.
+        - notEqualOp()   ✅[CORRIGIDO] Método implementado.
+        - lowerThanOp()   
+        - greaterThanOp()   
+        - lowerEqualOp()   
+        - greaterEqualOp()   
+        - listSubtractOp()   
+        - listConcatOp()   
+        - stringConcatOp()  ✅[CORRIGIDO] Método implementado.
+        - addOp()   ✅[CORRIGIDO] Método implementado.
+        - subOp()   ✅[CORRIGIDO] Método implementado.
+        - mulOp()   ✅[CORRIGIDO] Método implementado.
+        - divOp()   ✅[CORRIGIDO] Método implementado.
 
 
 - miex.java
+    ❌ Remover o import de Token, que foi usado só para testar o analisador léxico
     ❌ Definir output como 'false' quando for entregar o programa.
         
 
 - interpreter/expr
-    ❌ Falta criar as classes ListExpr, TupleExpr, ForExpr, CondExpr, FunctionInvocationExpr e IfExpr.
+    ❌ Falta criar as classes ListExpr, TupleExpr, TupleItem, ForExpr, CondExpr, FunctionInvocationExpr e IfExpr.
+        ✅[CORRIGIDO] Classes criadas.
+    ❌ Falta concluir a implementação das classes:
+        - ListExpr
+        - TupleExpr
+        - TupleItem
+        - ForExpr
+        - CondExpr
+        - FunctionInvocationExpr 
+        - IfExpr
 
 
 - interpreter/literal
