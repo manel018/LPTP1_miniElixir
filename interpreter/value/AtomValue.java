@@ -12,6 +12,8 @@ public class AtomValue extends Value<AtomLiteral> {
     public static final AtomValue OK;
     public static final AtomValue ERROR;
 
+    // Este bloco estático de inicialização
+    // cria 5 intâncias estáticas dessa classe
     static {
         NIL = new AtomValue(AtomLiteral.instance(":nil"));
         FALSE = new AtomValue(AtomLiteral.instance(":false"));

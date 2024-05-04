@@ -65,13 +65,12 @@ public class miex {
                      lex.type != Token.Type.INVALID_TOKEN &&
                      lex.type != Token.Type.UNEXPECTED_EOF);
             */
-            
             // O código a seguir é dado para testar o interpretador.
             // TODO: descomentar depois que o analisador léxico estiver OK.
             SyntaticAnalysis s = new SyntaticAnalysis(l);
             Expr expr = s.process();
             Value<?> value = Interpreter.interpret(expr);
-            if (output)
+            if (output) 
                 System.out.println(value);
         } catch (LanguageException e) {
             System.out.println(e.getMessage());

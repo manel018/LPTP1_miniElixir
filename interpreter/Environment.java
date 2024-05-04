@@ -11,7 +11,7 @@ import lexical.Token;
 
 public class Environment {
 
-    private final Environment enclosing;
+    private final Environment enclosing;    //Escopo 'pai'
     private final Map<String, Value<?>> memory;
 
     public Environment() {

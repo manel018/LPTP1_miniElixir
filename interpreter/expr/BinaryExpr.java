@@ -129,19 +129,63 @@ public class BinaryExpr extends Expr {
     }
 
     private Value<?> lowerThanOp(Environment env) {
-        throw new RuntimeException("Implement me!2");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        if(v1 instanceof IntValue && v2 instanceof IntValue){
+            IntValue iv1 = (IntValue) v1;
+            IntValue iv2 = (IntValue) v2;
+
+            if (iv2.value().intValue() < iv1.value().intValue())
+                return AtomValue.TRUE;
+        }
+        
+        return AtomValue.FALSE;
     }
 
     private Value<?> greaterThanOp(Environment env) {
-        throw new RuntimeException("Implement me!3");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        if(v1 instanceof IntValue && v2 instanceof IntValue){
+            IntValue iv1 = (IntValue) v1;
+            IntValue iv2 = (IntValue) v2;
+
+            if(iv2.value().intValue() > iv1.value().intValue())
+                return AtomValue.TRUE;
+        }
+
+        return AtomValue.FALSE;
     }
 
     private Value<?> lowerEqualOp(Environment env) {
-        throw new RuntimeException("Implement me!4");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        if(v1 instanceof IntValue && v2 instanceof IntValue){
+            IntValue iv1 = (IntValue) v1;
+            IntValue iv2 = (IntValue) v2;
+
+            if(iv2.value().intValue() <= iv1.value().intValue())
+                return AtomValue.TRUE;
+        }
+
+        return AtomValue.FALSE;
     }
 
     private Value<?> greaterEqualOp(Environment env) {
-        throw new RuntimeException("Implement me!5");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        if(v1 instanceof IntValue && v2 instanceof IntValue){
+            IntValue iv1 = (IntValue) v1;
+            IntValue iv2 = (IntValue) v2;
+
+            if(iv2.value().intValue() >= iv1.value().intValue())
+                return AtomValue.TRUE;
+        }
+
+        return AtomValue.FALSE;
     }
 
     private Value<?> listSubtractOp(Environment env) {
