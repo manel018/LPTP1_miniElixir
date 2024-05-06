@@ -13,7 +13,6 @@ public class ExprBlock extends Expr {
 
     public ExprBlock(int line) {
         super(line);
-
         block = new ArrayList<Expr>();
     }
 

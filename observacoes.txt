@@ -9,7 +9,7 @@ Lista de observações e modificações a serem consideradas no código:
     ❌ Falta implementar os métodos:
         - procRel()  ✅[CORRIGIDO] Método implementado.
         - procRValue()
-        - procList()
+        - procList()   ✅[CORRIGIDO] Método implementado.
         - procTuple()
         - procIf()
         - procCond()
@@ -20,26 +20,29 @@ Lista de observações e modificações a serem consideradas no código:
 
 - ListValue.java
     ❌ Não é necessário reimplementar o método toString() na classe ListValue, porque seu atributo value (da classe ListLiteral) já o implementou.
-            
+            ✅❓[CORRIGIDO] A chamada direta está sendo feita. (A versão anterior somente foi comentada)
 
 - BinaryExpr.java
     ❌ Falta implementar os métodos internos de operações relacionais:
-        - andOp()   ✅❓[CORRIGIDO] Método implementado. (O método retorna o último valor avaliado, não necessariamente 'false' ou 'true')
-        - orOp()   ✅❓[CORRIGIDO] Método implementado. (O método retorna o último valor avaliado, não necessariamente 'false' ou 'true')
+        - andOp()   ✅❓[CORRIGIDO] Método implementado. (O método retorna o último valor avaliado, não necessariamente :false ou :true)
+        - orOp()   ✅❓[CORRIGIDO] Método implementado. (O método retorna o último valor avaliado, não necessariamente :false ou :true)
         - equalOp()   ✅[CORRIGIDO] Método implementado.
         - notEqualOp()   ✅[CORRIGIDO] Método implementado.
-        - lowerThanOp()   
-        - greaterThanOp()   
-        - lowerEqualOp()   
-        - greaterEqualOp()   
-        - listSubtractOp()   
-        - listConcatOp()   
+        - lowerThanOp()   ✅[CORRIGIDO] Método implementado.
+        - greaterThanOp()   ✅[CORRIGIDO] Método implementado.
+        - lowerEqualOp()   ✅[CORRIGIDO] Método implementado.
+        - greaterEqualOp()   ✅[CORRIGIDO] Método implementado.
+        - listSubtractOp()   ✅[CORRIGIDO] Método implementado.
+        - listConcatOp()   ✅[CORRIGIDO] Método implementado.
         - stringConcatOp()  ✅[CORRIGIDO] Método implementado.
         - addOp()   ✅[CORRIGIDO] Método implementado.
         - subOp()   ✅[CORRIGIDO] Método implementado.
         - mulOp()   ✅[CORRIGIDO] Método implementado.
         - divOp()   ✅[CORRIGIDO] Método implementado.
 
+- AssignExpr.java
+    ❌ Falta implementar a atribuição de variáveis com sintaxe de listas.
+        ✅[CORRIGIDO] O recurso foi implementado.
 
 - miex.java
     ❌ Remover o import de Token, que foi usado só para testar o analisador léxico
@@ -50,7 +53,7 @@ Lista de observações e modificações a serem consideradas no código:
     ❌ Falta criar as classes ListExpr, TupleExpr, TupleItem, ForExpr, CondExpr, FunctionInvocationExpr e IfExpr.
         ✅[CORRIGIDO] Classes criadas.
     ❌ Falta concluir a implementação das classes:
-        - ListExpr
+        - ListExpr ✅[CORRIGIDO] Classe criada.
         - TupleExpr
         - TupleItem
         - ForExpr

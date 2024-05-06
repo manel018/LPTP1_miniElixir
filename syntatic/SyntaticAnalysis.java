@@ -57,6 +57,7 @@ import interpreter.expr.BinaryExpr;
 import interpreter.expr.ConstExpr;
 import interpreter.expr.Expr;
 import interpreter.expr.ExprBlock;
+import interpreter.expr.ListExpr;
 import interpreter.expr.UnaryExpr;
 import interpreter.expr.UnlessExpr;
 import interpreter.expr.Variable;
@@ -358,7 +359,7 @@ public class SyntaticAnalysis {
         if (check(INTEGER_LITERAL, STRING_LITERAL, ATOM_LITERAL)) {
             expr = procConst();
         } else if (check(OPEN_BRA)) {
-            procList();
+            expr = procList();
         } else if (check(OPEN_CUR)) {
             procTuple();
         } else if (check(IF)) {
@@ -400,14 +401,19 @@ public class SyntaticAnalysis {
     }
 
     // <list> ::= '[' [ <expr> { ',' <expr> } ] ']'
-    private void procList() {
+    private ListExpr procList() {
         eat(OPEN_BRA);
+        ListExpr listExpr = new ListExpr(previous.line);
+
         if (!check(CLOSE_BRA)) {
-            procExpr();
+            listExpr.add(procExpr());
             while (match(COMMA)) {
-                procExpr();
+                listExpr.add(procExpr());
             }
         }
+        eat(CLOSE_BRA);
+
+        return listExpr;
     }
 
     // <tuple> ::= '{' [ <expr> ':' <expr> { ',' <expr> ':' <expr> } ] '}'

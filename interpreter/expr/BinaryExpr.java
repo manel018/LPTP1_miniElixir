@@ -2,9 +2,10 @@ package interpreter.expr;
 
 import error.LanguageException;
 import interpreter.Environment;
-import interpreter.literal.AtomLiteral;
+import interpreter.literal.ListLiteral;
 import interpreter.value.AtomValue;
 import interpreter.value.IntValue;
+import interpreter.value.ListValue;
 import interpreter.value.StringValue;
 import interpreter.value.Value;
 
@@ -106,10 +107,8 @@ public class BinaryExpr extends Expr {
         Value<?> v1 = left.expr(env);
         Value<?> v2 = right.expr(env);
 
-        // Se o tipo forem diferentes, retorna :false
-        if(v1.getClass() != v2.getClass())
-            return AtomValue.FALSE;
-        else if(v1.equals(v2))
+        // Os tipos devem ser iguais
+        if(v1.getClass() == v2.getClass() && v1.equals(v2))
             return AtomValue.TRUE;
         else
             return AtomValue.FALSE;
@@ -119,10 +118,8 @@ public class BinaryExpr extends Expr {
         Value<?> v1 = right.expr(env);
         Value<?> v2 = left.expr(env);
         
-        // Se os tipos forem diferentes, retorna :false
-        if(v1.getClass() != v2.getClass())
-            return AtomValue.FALSE;
-        else if (!v1.equals(v2))
+        // Os tipos devem ser iguais
+        if(v1.getClass() == v2.getClass() && !v1.equals(v2))
             return AtomValue.TRUE;
         else
             return AtomValue.FALSE;
@@ -189,11 +186,44 @@ public class BinaryExpr extends Expr {
     }
 
     private Value<?> listSubtractOp(Environment env) {
-        throw new RuntimeException("Implement me!6");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        if(v1 instanceof ListValue && v2 instanceof ListValue){
+            ListLiteral listLit1 = ((ListValue) v1).value();
+            ListLiteral listLit2 = ((ListValue) v2).value();
+
+            ListLiteral subtractList = new ListLiteral();
+            for(Value<?> value : listLit2)
+            // Inclua o valor na lista resultante somente
+            // se ele não estiver contido na lista da direita
+                if(!listLit1.contains(value))
+                    subtractList.add(value);
+
+            return new ListValue(subtractList);
+            
+        } else
+            throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 
     private Value<?> listConcatOp(Environment env) {
-        throw new RuntimeException("Implement me!7");
+        Value<?> v1 = right.expr(env);
+        Value<?> v2 = left.expr(env);
+
+        if(v1 instanceof ListValue && v2 instanceof ListValue){
+            ListLiteral listV1 = ((ListValue) v1).value();
+            ListLiteral listV2 = ((ListValue) v2).value();
+            
+            ListLiteral concatList = new ListLiteral();
+            for(Value<?> value : listV2)
+                concatList.add(value);
+            for(Value<?> value : listV1)
+                concatList.add(value);
+
+            return new ListValue(concatList);
+
+        } else
+            throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 
     private Value<?> stringConcatOp(Environment env) {

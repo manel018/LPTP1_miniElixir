@@ -37,21 +37,21 @@ public class ListValue extends Value<ListLiteral> {
     @Override
     public String toString() {
         // Opção melhorada:
-        // return this.value.toString();
+         return this.value.toString();
 
-        StringBuffer sb = new StringBuffer();
-        sb.append("[");
+        // StringBuffer sb = new StringBuffer();
+        // sb.append("[");
 
-        for (Value<?> v : this.value) {
-            sb.append(v.toString());
-            sb.append(",");
-        }
+        // for (Value<?> v : this.value) {
+        //     sb.append(v.toString());
+        //     sb.append(",");
+        // }
 
-        if (sb.length() > 1)
-            sb.setLength(sb.length() - 1);
+        // if (sb.length() > 1)
+        //     sb.setLength(sb.length() - 1);
 
-        sb.append("]");
-        return sb.toString();
+        // sb.append("]");
+        // return sb.toString();
     }
 
 }

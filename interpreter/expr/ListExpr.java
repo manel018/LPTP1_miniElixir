@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interpreter.Environment;
+import interpreter.literal.ListLiteral;
+import interpreter.value.ListValue;
 import interpreter.value.Value;
 
 public class ListExpr extends Expr {
@@ -11,7 +13,6 @@ public class ListExpr extends Expr {
 
     public ListExpr(int line){
         super(line);
-
         list = new ArrayList<Expr>();
     }
 
@@ -24,7 +25,15 @@ public class ListExpr extends Expr {
     }
 
     public Value<?> expr(Environment env){
-        //TODO: Implement me!
-        return null;
+        Value<?> listValue = null;
+        ListLiteral listLiteral = new ListLiteral();
+
+        for(Expr expr : list){
+            listLiteral.add(expr.expr(env));
+        }
+
+        listValue = new ListValue(listLiteral);
+        
+        return listValue;
     }
 }
