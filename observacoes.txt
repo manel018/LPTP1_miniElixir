@@ -10,10 +10,10 @@ Lista de observações e modificações a serem consideradas no código:
         - procRel()  ✅[CORRIGIDO] Método implementado.
         - procRValue()
         - procList()   ✅[CORRIGIDO] Método implementado.
-        - procTuple()
-        - procIf()
-        - procCond()
-        - procFor()
+        - procTuple()   ✅[CORRIGIDO] Método implementado.
+        - procIf()   ✅[CORRIGIDO] Método implementado.
+        - procCond()   ✅[CORRIGIDO] Método implementado.
+        - procFor()   ✅[CORRIGIDO] Método implementado.
         - procFn()
         - procNative()
     
@@ -32,8 +32,8 @@ Lista de observações e modificações a serem consideradas no código:
         - greaterThanOp()   ✅[CORRIGIDO] Método implementado.
         - lowerEqualOp()   ✅[CORRIGIDO] Método implementado.
         - greaterEqualOp()   ✅[CORRIGIDO] Método implementado.
-        - listSubtractOp()   ✅[CORRIGIDO] Método implementado.
-        - listConcatOp()   ✅[CORRIGIDO] Método implementado.
+        - listSubtractOp()   ✅❓[CORRIGIDO] Método implementado. (Serve para Listas e Tuplas)
+        - listConcatOp()   ✅❓[CORRIGIDO] Método implementado. (Serve para Listas e Tuplas)
         - stringConcatOp()  ✅[CORRIGIDO] Método implementado.
         - addOp()   ✅[CORRIGIDO] Método implementado.
         - subOp()   ✅[CORRIGIDO] Método implementado.
@@ -54,12 +54,12 @@ Lista de observações e modificações a serem consideradas no código:
         ✅[CORRIGIDO] Classes criadas.
     ❌ Falta concluir a implementação das classes:
         - ListExpr ✅[CORRIGIDO] Classe criada.
-        - TupleExpr
-        - TupleItem
-        - ForExpr
-        - CondExpr
+        - TupleExpr   ✅[CORRIGIDO] Classe criada.
+        - TupleItem   ✅[CORRIGIDO] Classe criada.
+        - ForExpr   ✅[CORRIGIDO] Classe criada.
+        - CondExpr   ✅[CORRIGIDO] Classe criada.
         - FunctionInvocationExpr 
-        - IfExpr
+        - IfExpr   ✅[CORRIGIDO] Método implementado.
 
 
 - interpreter/literal

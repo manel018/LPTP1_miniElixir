@@ -15,7 +15,9 @@ import static lexical.Token.Type.NOT_EQUAL;
 import static lexical.Token.Type.AT;
 import static lexical.Token.Type.ATOM_LITERAL;
 import static lexical.Token.Type.CLOSE_BRA;
+import static lexical.Token.Type.CLOSE_CUR;
 import static lexical.Token.Type.CLOSE_PAR;
+import static lexical.Token.Type.COLON;
 import static lexical.Token.Type.COMMA;
 import static lexical.Token.Type.COND;
 import static lexical.Token.Type.DIV;
@@ -51,13 +53,20 @@ import static lexical.Token.Type.SUB;
 import static lexical.Token.Type.TL;
 import static lexical.Token.Type.UNLESS;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import error.LanguageException;
 import interpreter.expr.AssignExpr;
 import interpreter.expr.BinaryExpr;
+import interpreter.expr.CondExpr;
 import interpreter.expr.ConstExpr;
 import interpreter.expr.Expr;
 import interpreter.expr.ExprBlock;
+import interpreter.expr.ForExpr;
+import interpreter.expr.IfExpr;
 import interpreter.expr.ListExpr;
+import interpreter.expr.TupleExpr;
 import interpreter.expr.UnaryExpr;
 import interpreter.expr.UnlessExpr;
 import interpreter.expr.Variable;
@@ -361,15 +370,15 @@ public class SyntaticAnalysis {
         } else if (check(OPEN_BRA)) {
             expr = procList();
         } else if (check(OPEN_CUR)) {
-            procTuple();
+            expr = procTuple();
         } else if (check(IF)) {
-            procIf();
+            expr = procIf();
         } else if (check(UNLESS)) {
             expr = procUnless();
         } else if (check(COND)) {
-            procCond();
+            expr = procCond();
         } else if (check(FOR)) {
-            procFor();
+            expr = procFor();
         } else if (check(FN)) {
             procFn();
         } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
@@ -405,11 +414,10 @@ public class SyntaticAnalysis {
         eat(OPEN_BRA);
         ListExpr listExpr = new ListExpr(previous.line);
 
-        if (!check(CLOSE_BRA)) {
-            listExpr.add(procExpr());
-            while (match(COMMA)) {
+        if (!check(CLOSE_BRA)){
+            do{
                 listExpr.add(procExpr());
-            }
+            } while(match(COMMA));
         }
         eat(CLOSE_BRA);
 
@@ -417,20 +425,40 @@ public class SyntaticAnalysis {
     }
 
     // <tuple> ::= '{' [ <expr> ':' <expr> { ',' <expr> ':' <expr> } ] '}'
-    private void procTuple() {
-        // TODO: implement me!
+    private TupleExpr procTuple() {
+        eat(OPEN_CUR);
+        TupleExpr tupleExpr = new TupleExpr(previous.line);
+
+        if(!check(CLOSE_CUR)){
+            do{
+                Expr key = procExpr();
+                eat(COLON);
+                Expr value = procExpr();
+                
+                tupleExpr.add(key, value);
+            } while(match(COMMA));
+        }
+        eat(CLOSE_CUR);
+
+        return tupleExpr;
     }
 
     // <if> ::= if <expr> do <code> [ else <code> ] end
-    private void procIf() {
+    private IfExpr procIf() {
         eat(IF);
-        procExpr();
+        int line = previous.line;
+
+        Expr cond = procExpr();
         eat(DO);
-        procCode();
+        Expr thenExpr = procCode();
+
+        Expr elseExpr = null;
         if (match(ELSE)) {
-            procCode();
+            elseExpr = procCode();
         }
         eat(END);
+
+        return new IfExpr(line, cond, thenExpr, elseExpr);
     }
 
     // <unless> ::= unless <expr> do <code> end
@@ -448,22 +476,41 @@ public class SyntaticAnalysis {
     }
 
     // <cond> ::= cond do { <expr> '->' <expr> } end
-    private void procCond() {
-        // TODO: implement me!
+    private CondExpr procCond() {
+        eat(COND);
+        eat(DO);
+        CondExpr cExpr = new CondExpr(previous.line);
+
+        while(checkExpr()){
+            Expr cond = procExpr();
+            eat(RIGHT_ARROW);
+            Expr body = procExpr();
+
+            cExpr.add(cond, body);
+        }
+        eat(END);
+
+        return cExpr;
     }
 
     // <for> ::= for <name> '<-' <expr> { ',' <expr> } do <code> end
-    private void procFor() {
+    private ForExpr procFor() {
         eat(FOR);
-        procName();
+        int line = previous.line;
+        Variable var = procName();
+
         eat(LEFT_ARROW);
-        procExpr();
+        Expr expr = procExpr();
+
+        List<Expr> filters = new ArrayList<Expr>();
         while (match(COMMA)) {
-            procExpr();
+            filters.add(procExpr());
         }
         eat(DO);
-        procCode();
+        Expr body = procCode();
         eat(END);
+
+        return new ForExpr(line, var, expr, filters, body);
     }
 
     // <fn> ::= fn [ <name> { ',' <name> } ] '->' <code> end

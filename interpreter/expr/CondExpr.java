@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interpreter.Environment;
+import interpreter.value.AtomValue;
 import interpreter.value.Value;
 
 public class CondExpr extends Expr{
@@ -20,7 +21,10 @@ public class CondExpr extends Expr{
     }
 
     public Value<?> expr(Environment env){
-        //TODO: Implement me!
-        throw new UnsupportedOperationException("Unimplemented method 'expr'");
+        for(CondItem cItem : items){
+            if(cItem.cond.expr(env).eval())
+                return cItem.body.expr(env);
+        }
+        return AtomValue.NIL;
     }
 }

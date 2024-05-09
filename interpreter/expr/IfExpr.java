@@ -1,6 +1,7 @@
 package interpreter.expr;
 
 import interpreter.Environment;
+import interpreter.value.AtomValue;
 import interpreter.value.Value;
 
 public class IfExpr extends Expr{
@@ -16,7 +17,15 @@ public class IfExpr extends Expr{
     }
 
     public Value<?> expr(Environment env){
-        //TODO: Implement me!
-        throw new UnsupportedOperationException("Unimplemented method 'expr'");
+        Value<?> cvalue = cond.expr(env);
+
+        if(cvalue.eval() || cvalue.equals(AtomValue.ERROR)){
+            Environment newEnv = new Environment(env);
+            return thenExpr.expr(newEnv);
+        } else if(elseExpr != null){
+            Environment newEnv = new Environment(env);
+            return elseExpr.expr(newEnv);
+        } else 
+            return AtomValue.NIL;
     }
 }

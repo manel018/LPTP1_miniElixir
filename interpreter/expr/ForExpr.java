@@ -2,7 +2,10 @@ package interpreter.expr;
 
 import java.util.List;
 
+import error.LanguageException;
 import interpreter.Environment;
+import interpreter.literal.ListLiteral;
+import interpreter.value.ListValue;
 import interpreter.value.Value;
 
 public class ForExpr extends Expr{
@@ -20,8 +23,33 @@ public class ForExpr extends Expr{
     }
 
     public Value<?> expr(Environment env) {
-        // TODO: Implement me!
-        throw new UnsupportedOperationException("Unimplemented method 'expr'");
+        Value<?> value = expr.expr(env);
+        ListLiteral result = new ListLiteral();
+        
+        if(value instanceof ListValue){
+            ListLiteral list = ((ListValue) value).value();
+            Environment newEnv = new Environment(env);
+            boolean filterTest;
+            
+            for(Value<?> v : list){
+                filterTest = true;
+                var.setValue(newEnv, v);    
+
+                for(Expr cond : filters){
+                // Se alguma condição do filtro não for satisfeita,
+                // então o valor não é adicionado à lista
+                    if(!cond.expr(newEnv).eval()){
+                        filterTest = false;
+                        break;
+                    }
+                }
+                if(filterTest)
+                    result.add(v);
+            }
+            return new ListValue(result);
+        } // TODO: Pode haver TUPLAS, que também são iteráveis
+        else
+            throw LanguageException.instance(super.getLine(),LanguageException.Error.InvalidOperation);
     }
 
 

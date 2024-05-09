@@ -3,10 +3,13 @@ package interpreter.expr;
 import error.LanguageException;
 import interpreter.Environment;
 import interpreter.literal.ListLiteral;
+import interpreter.literal.TupleItem;
+import interpreter.literal.TupleLiteral;
 import interpreter.value.AtomValue;
 import interpreter.value.IntValue;
 import interpreter.value.ListValue;
 import interpreter.value.StringValue;
+import interpreter.value.TupleValue;
 import interpreter.value.Value;
 
 public class BinaryExpr extends Expr {
@@ -189,6 +192,7 @@ public class BinaryExpr extends Expr {
         Value<?> v1 = right.expr(env);
         Value<?> v2 = left.expr(env);
 
+        // Subtrai Listas
         if(v1 instanceof ListValue && v2 instanceof ListValue){
             ListLiteral listLit1 = ((ListValue) v1).value();
             ListLiteral listLit2 = ((ListValue) v2).value();
@@ -202,7 +206,20 @@ public class BinaryExpr extends Expr {
 
             return new ListValue(subtractList);
             
-        } else
+        // Subtrai Tuplas
+        } else if(v1 instanceof TupleValue && v2 instanceof TupleValue){
+            TupleLiteral tupleV1 = ((TupleValue) v1).value();
+            TupleLiteral tupleV2 = ((TupleValue) v2).value();
+            
+            TupleLiteral subtractTuple = new TupleLiteral();
+            for(TupleItem item : tupleV2)
+            // Inclua o item na tupla resultante somente
+            // se ele não estiver contido na lista da direita
+                if(!tupleV1.contains(item))
+                    subtractTuple.add(item);
+
+            return new TupleValue(subtractTuple);
+        }else
             throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 
@@ -210,6 +227,7 @@ public class BinaryExpr extends Expr {
         Value<?> v1 = right.expr(env);
         Value<?> v2 = left.expr(env);
 
+        // Concatena Listas
         if(v1 instanceof ListValue && v2 instanceof ListValue){
             ListLiteral listV1 = ((ListValue) v1).value();
             ListLiteral listV2 = ((ListValue) v2).value();
@@ -222,6 +240,19 @@ public class BinaryExpr extends Expr {
 
             return new ListValue(concatList);
 
+        // Concatena Tuplas
+        } else if(v1 instanceof TupleValue && v2 instanceof TupleValue){
+            TupleLiteral tupleV1 = ((TupleValue) v1).value();
+            TupleLiteral tupleV2 = ((TupleValue) v2).value();
+
+            TupleLiteral concatTuple = new TupleLiteral();
+            for(TupleItem item : tupleV2)
+                concatTuple.add(item);
+            for(TupleItem item : tupleV1)
+                concatTuple.add(item);
+
+            return new TupleValue(concatTuple);
+            
         } else
             throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }

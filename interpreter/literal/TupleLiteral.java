@@ -82,6 +82,7 @@ public class TupleLiteral implements Iterable<TupleItem> {
             sb.append(",");
         }
 
+        // Remove a última vírgula, caso haja itens em list
         if (sb.length() > 1)
             sb.setLength(sb.length() - 1);
 
