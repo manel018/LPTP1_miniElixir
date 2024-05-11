@@ -50,17 +50,25 @@ Lista de observações e modificações a serem consideradas no código:
         
 
 - interpreter/expr
-    ❌ Falta criar as classes ListExpr, TupleExpr, TupleItem, ForExpr, CondExpr, FunctionInvocationExpr e IfExpr.
-        ✅[CORRIGIDO] Classes criadas.
-    ❌ Falta concluir a implementação das classes:
-        - ListExpr ✅[CORRIGIDO] Classe criada.
-        - TupleExpr   ✅[CORRIGIDO] Classe criada.
-        - TupleItem   ✅[CORRIGIDO] Classe criada.
-        - ForExpr   ✅[CORRIGIDO] Classe criada.
-        - CondExpr   ✅[CORRIGIDO] Classe criada.
+    ❌ Falta implementar das classes:
+        - ListExpr ✅[CORRIGIDO] Classe implementada.
+        - TupleExpr   ✅[CORRIGIDO] Classe implementada.
+        - TupleItem   ✅[CORRIGIDO] Classe implementada.
+        - ForExpr   ✅[CORRIGIDO] Classe implementada.
+        - CondExpr   ✅[CORRIGIDO] Classe implementada.
         - FunctionInvocationExpr 
-        - IfExpr   ✅[CORRIGIDO] Método implementado.
+            ❓ Optou-se por alterar o tipo do atributo 'args' de List<Expr> para List<Variable>, pois a regra na gramática só aceita tokens do tipo Name neste campo.
+            ❓ O tipo do parâmetro do método addArg() também seguiu esta mudança,
+               assim, evita-se a má prática de fazer um downcasting pressupondo que o argumento Expr seja uma Variable.
+        - IfExpr   ✅[CORRIGIDO] Classe implementada.
 
 
 - interpreter/literal
-    ❌ Falta criar as classes FunctionLiteral, StandardFunctionLiteral, NativeFunctionLiteral.
+    ❌ Falta implementar as classes:
+        - FunctionLiteral   
+        - StandardFunctionLiteral   
+        - NativeFunctionLiteral
+
+- interpreter/value
+    ❌ Falta implementar as classes:
+        - FunctionValue

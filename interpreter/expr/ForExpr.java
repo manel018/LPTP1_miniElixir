@@ -29,21 +29,21 @@ public class ForExpr extends Expr{
         if(value instanceof ListValue){
             ListLiteral list = ((ListValue) value).value();
             Environment newEnv = new Environment(env);
-            boolean filterTest;
+            boolean filterFlag;
             
             for(Value<?> v : list){
-                filterTest = true;
+                filterFlag = true;
                 var.setValue(newEnv, v);    
 
                 for(Expr cond : filters){
                 // Se alguma condição do filtro não for satisfeita,
                 // então o valor não é adicionado à lista
                     if(!cond.expr(newEnv).eval()){
-                        filterTest = false;
+                        filterFlag = false;
                         break;
                     }
                 }
-                if(filterTest)
+                if(filterFlag)
                     result.add(v);
             }
             return new ListValue(result);

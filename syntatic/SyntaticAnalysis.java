@@ -64,6 +64,7 @@ import interpreter.expr.ConstExpr;
 import interpreter.expr.Expr;
 import interpreter.expr.ExprBlock;
 import interpreter.expr.ForExpr;
+import interpreter.expr.FunctionInvocationExpr;
 import interpreter.expr.IfExpr;
 import interpreter.expr.ListExpr;
 import interpreter.expr.TupleExpr;
@@ -380,7 +381,7 @@ public class SyntaticAnalysis {
         } else if (check(FOR)) {
             expr = procFor();
         } else if (check(FN)) {
-            procFn();
+            expr = procFn();
         } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
             procNative();
         } else if (check(NAME)) {
@@ -514,17 +515,26 @@ public class SyntaticAnalysis {
     }
 
     // <fn> ::= fn [ <name> { ',' <name> } ] '->' <code> end
-    private void procFn() {
+    private FunctionInvocationExpr procFn() {
         eat(FN);
-        if (check(NAME)) {
-            procName();
-            while (match(COMMA)) {
-                procName();
+        int line = previous.line;
+
+        List<Variable> args = new ArrayList<Variable>();
+        if (!check(RIGHT_ARROW)) {
+            do{
+                args.add(procName());
             }
+            while (match(COMMA));
         }
         eat(RIGHT_ARROW);
-        procCode();
+        Expr code = procCode();
         eat(END);
+
+        FunctionInvocationExpr fn = new FunctionInvocationExpr(line, code);
+        for(Variable var : args)
+            fn.addArg(var);
+
+        return fn;
     }
 
     // <native> ::= puts | read | int | str | length | hd | tl | at | rem

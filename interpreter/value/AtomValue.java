@@ -6,6 +6,8 @@ public class AtomValue extends Value<AtomLiteral> {
 
     private AtomLiteral value;
 
+    // 'Final' indica que, após atribuídos, os valores
+    // dessas instâncias não podem ser mais alterados
     public static final AtomValue NIL;
     public static final AtomValue FALSE;
     public static final AtomValue TRUE;
