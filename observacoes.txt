@@ -73,7 +73,7 @@ Lista de observações e modificações a serem consideradas no código:
 
 - NativeFunctionLiteral.java
     ❌ Falta implementar o método invoke(), definindo as funções nativas:
-        - puts()
+        - puts() 
         - read()
         - int()
         - str()
