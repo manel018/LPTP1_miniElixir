@@ -14,8 +14,10 @@ Lista de observações e modificações a serem consideradas no código:
         - procIf()   ✅[CORRIGIDO] Método implementado.
         - procCond()   ✅[CORRIGIDO] Método implementado.
         - procFor()   ✅[CORRIGIDO] Método implementado.
-        - procFn()
+        - procFn()   
         - procNative()
+        - procInvoke()   ✅[CORRIGIDO] Método implementado.
+
     
 
 - ListValue.java
@@ -56,19 +58,31 @@ Lista de observações e modificações a serem consideradas no código:
         - TupleItem   ✅[CORRIGIDO] Classe implementada.
         - ForExpr   ✅[CORRIGIDO] Classe implementada.
         - CondExpr   ✅[CORRIGIDO] Classe implementada.
-        - FunctionInvocationExpr 
+        - FunctionInvocationExpr   ✅[CORRIGIDO] Classe implementada.
             ❓ Optou-se por alterar o tipo do atributo 'args' de List<Expr> para List<Variable>, pois a regra na gramática só aceita tokens do tipo Name neste campo.
             ❓ O tipo do parâmetro do método addArg() também seguiu esta mudança,
-               assim, evita-se a má prática de fazer um downcasting pressupondo que o argumento Expr seja uma Variable.
+               assim, evita-se a má prática de fazer um downcasting pressupondo, sem verificar, que o argumento Expr seja uma Variable.
         - IfExpr   ✅[CORRIGIDO] Classe implementada.
 
 
 - interpreter/literal
-    ❌ Falta implementar as classes:
-        - FunctionLiteral   
+    ❌ Falta concluir as classes:
+        - FunctionLiteral   ✅❓[CORRIGIDO] Classe finalizada (O método toString() é duvidoso).
         - StandardFunctionLiteral   
         - NativeFunctionLiteral
 
+- NativeFunctionLiteral.java
+    ❌ Falta implementar o método invoke(), definindo as funções nativas:
+        - puts()
+        - read()
+        - int()
+        - str()
+        - length()
+        - hd()
+        - t1()
+        - at()
+        - rem()
+
 - interpreter/value
-    ❌ Falta implementar as classes:
-        - FunctionValue
+    ❌ Falta implementar a classe FunctionValue.
+        ✅[CORRIGIDO] A classe foi criada.

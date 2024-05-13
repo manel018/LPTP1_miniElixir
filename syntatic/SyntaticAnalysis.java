@@ -381,7 +381,7 @@ public class SyntaticAnalysis {
         } else if (check(FOR)) {
             expr = procFor();
         } else if (check(FN)) {
-            expr = procFn();
+            procFn();
         } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
             procNative();
         } else if (check(NAME)) {
@@ -515,26 +515,19 @@ public class SyntaticAnalysis {
     }
 
     // <fn> ::= fn [ <name> { ',' <name> } ] '->' <code> end
-    private FunctionInvocationExpr procFn() {
+    private void procFn() {
+        // TODO: Implement me!
         eat(FN);
-        int line = previous.line;
-
-        List<Variable> args = new ArrayList<Variable>();
-        if (!check(RIGHT_ARROW)) {
-            do{
-                args.add(procName());
+        if (check(NAME)) {
+            procName();
+            while (match(COMMA)) {
+                procName();
             }
-            while (match(COMMA));
         }
         eat(RIGHT_ARROW);
-        Expr code = procCode();
+        procCode();
         eat(END);
-
-        FunctionInvocationExpr fn = new FunctionInvocationExpr(line, code);
-        for(Variable var : args)
-            fn.addArg(var);
-
-        return fn;
+        
     }
 
     // <native> ::= puts | read | int | str | length | hd | tl | at | rem
@@ -548,18 +541,17 @@ public class SyntaticAnalysis {
 
     // <invoke> ::= [ '(' [ <expr> { ',' <expr> } ] ')' ]
     private Expr procInvoke() {
-        Expr expr = null;
+        ListExpr args = new ListExpr(current.line);
         if(match(OPEN_PAR)){
             if(checkExpr()) {
-                //TODO: Implement me!
-                procExpr();
-                while (match(COMMA)) {
-                    procExpr(); 
-                }
+                do{
+                    args.add(procExpr());
+                } 
+                while (match(COMMA));
             }
+            eat(CLOSE_PAR);
         }
-        return expr;
-        
+        return args;
     }
 
     private Variable procName() {

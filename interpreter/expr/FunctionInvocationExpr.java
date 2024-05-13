@@ -10,25 +10,20 @@ import interpreter.value.Value;
 
 public class FunctionInvocationExpr extends Expr{
     private Expr expr;
-    private List<Variable> args;
+    private List<Expr> args;
 
     public FunctionInvocationExpr(int line, Expr expr){
         super(line);
         this.expr = expr;
-        args = new ArrayList<Variable>();
+        args = new ArrayList<Expr>();
     }
 
-    public void addArg(Variable arg){
+    public void addArg(Expr arg){
         args.add(arg);
     }
     
     public Value<?> expr(Environment env){
-        StandardFunctionLiteral fn = new StandardFunctionLiteral();
-        fn.setBody(expr);
-        for(Variable arg : args){
-            fn.addParam(arg);
-        }
-
-        return new FunctionValue(fn);
+        // TODO: Implement me!
+        return null;
     }
 }
