@@ -540,7 +540,7 @@ public class SyntaticAnalysis {
     }
 
     // <invoke> ::= [ '(' [ <expr> { ',' <expr> } ] ')' ]
-    private Expr procInvoke() {
+    private ListExpr procInvoke() {
         ListExpr args = new ListExpr(current.line);
         if(match(OPEN_PAR)){
             if(checkExpr()) {
