@@ -14,7 +14,7 @@ public class NativeFunctionLiteral extends FunctionLiteral{
         StrOp,
         LengthOp,
         HdOp,
-        T1Op,
+        TlOp,
         AtOp,
         RemOp
     }

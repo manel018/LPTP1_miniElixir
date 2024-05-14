@@ -76,7 +76,7 @@ Lista de observações e modificações a serem consideradas no código:
         - str()
         - length()
         - hd()
-        - t1()
+        - tl()
         - at()
         - rem()
 
