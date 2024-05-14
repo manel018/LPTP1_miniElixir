@@ -1,7 +1,5 @@
 package interpreter.literal;
 
-import javax.management.StandardEmitterMBean;
-
 import interpreter.Environment;
 import interpreter.expr.Expr;
 import interpreter.value.Value;
@@ -18,8 +16,7 @@ public class StandardFunctionLiteral extends FunctionLiteral{
     }
 
     public Value<?> invoke(Environment env){
-        //TODO: Implement me
-        return null;
+        return expr.expr(env);
     }
 
     @Override

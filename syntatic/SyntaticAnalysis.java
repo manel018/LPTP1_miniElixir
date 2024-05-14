@@ -63,6 +63,7 @@ import interpreter.expr.CondExpr;
 import interpreter.expr.ConstExpr;
 import interpreter.expr.Expr;
 import interpreter.expr.ExprBlock;
+import interpreter.expr.FnExpr;
 import interpreter.expr.ForExpr;
 import interpreter.expr.FunctionInvocationExpr;
 import interpreter.expr.IfExpr;
@@ -357,9 +358,15 @@ public class SyntaticAnalysis {
         } else {
             expr = procRValue();
         }
-        // TODO: Implement me!
-        procInvoke();
-
+        
+        ListExpr invoke = procInvoke();
+        if(invoke != null){
+            expr = new FunctionInvocationExpr(previous.line, expr);
+            for(Expr arg : invoke.getList()){
+                ((FunctionInvocationExpr)expr).addArg(arg);
+            }
+        }
+        
         return expr;
     }
 
@@ -381,9 +388,9 @@ public class SyntaticAnalysis {
         } else if (check(FOR)) {
             expr = procFor();
         } else if (check(FN)) {
-            procFn();
+            expr = procFn();
         } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
-            procNative();
+            expr = procNative();
         } else if (check(NAME)) {
             expr = procName();
         } else {
@@ -515,34 +522,36 @@ public class SyntaticAnalysis {
     }
 
     // <fn> ::= fn [ <name> { ',' <name> } ] '->' <code> end
-    private void procFn() {
-        // TODO: Implement me!
+    private FnExpr procFn() {
         eat(FN);
-        if (check(NAME)) {
-            procName();
-            while (match(COMMA)) {
-                procName();
+        FnExpr fn = new FnExpr(previous.line);
+
+        if(check(NAME)){
+            do{
+                fn.addParam(procName());
             }
+            while (match(COMMA));
         }
         eat(RIGHT_ARROW);
-        procCode();
+        fn.setCode(procCode());
         eat(END);
-        
+
+        return fn;
     }
 
     // <native> ::= puts | read | int | str | length | hd | tl | at | rem
-    private void procNative() {
-        if (match(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
-            // Do nothing.
-        } else {
+    private Variable procNative() {
+        if (!match(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
             reportError();
-        }
+        } 
+        Variable var = new Variable(previous);
+        return var;
     }
 
     // <invoke> ::= [ '(' [ <expr> { ',' <expr> } ] ')' ]
-    private Expr procInvoke() {
-        ListExpr args = new ListExpr(current.line);
+    private ListExpr procInvoke() {
         if(match(OPEN_PAR)){
+            ListExpr args = new ListExpr(current.line);
             if(checkExpr()) {
                 do{
                     args.add(procExpr());
@@ -550,8 +559,12 @@ public class SyntaticAnalysis {
                 while (match(COMMA));
             }
             eat(CLOSE_PAR);
+
+            return args;
+        } else{
+            return null;
         }
-        return args;
+
     }
 
     private Variable procName() {

@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interpreter.Environment;
+import interpreter.literal.StandardFunctionLiteral;
+import interpreter.value.FunctionValue;
 import interpreter.value.Value;
 
 public class FnExpr extends Expr{
     private Expr code;
     private List<Variable> params;
 
-    public FnExpr(int line, Expr code){
+    public FnExpr(int line){
         super(line);
-        this.code = code;
         params = new ArrayList<Variable>();
+    }
+
+    public void setCode(Expr code){
+        this.code = code;
     }
 
     public void addParam(Variable param){
@@ -21,8 +26,13 @@ public class FnExpr extends Expr{
     }
 
     public Value<?> expr(Environment env){
-        // TODO: Implement me!
-        return null;
+        StandardFunctionLiteral fn = new StandardFunctionLiteral();
+        fn.setBody(code);
+        for(Variable param : params){
+            fn.addParam(param);
+        }
+
+        return new FunctionValue(fn);
     }
 
 

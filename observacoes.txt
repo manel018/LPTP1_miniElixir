@@ -76,9 +76,10 @@ Lista de observações e modificações a serem consideradas no código:
         - str()
         - length()
         - hd()
-        - t1()
+        - tl()
         - at()
         - rem()
+    ❌ Falta identificar a linha onde acontecem os erros das funções.
 
 - interpreter/value
     ❌ Falta implementar a classe FunctionValue.

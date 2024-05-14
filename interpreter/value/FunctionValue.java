@@ -1,8 +1,11 @@
 package interpreter.value;
 
+import interpreter.Interpreter;
+import interpreter.expr.Variable;
 import interpreter.literal.FunctionLiteral;
 import interpreter.literal.NativeFunctionLiteral;
-import interpreter.literal.NativeFunctionLiteral.NativeOp;;
+import interpreter.literal.NativeFunctionLiteral.NativeOp;
+import lexical.Token;;
 
 public class FunctionValue extends Value<FunctionLiteral>{
     private FunctionLiteral value;
@@ -13,7 +16,7 @@ public class FunctionValue extends Value<FunctionLiteral>{
     public static final FunctionValue STR_FN;
     public static final FunctionValue LENGTH_FN;
     public static final FunctionValue HD_FN;
-    public static final FunctionValue T1_FN;
+    public static final FunctionValue TL_FN;
     public static final FunctionValue AT_FN;
     public static final FunctionValue REM_FN;
 
@@ -25,7 +28,7 @@ public class FunctionValue extends Value<FunctionLiteral>{
         STR_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.StrOp));
         LENGTH_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.LengthOp));
         HD_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.HdOp));
-        T1_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.T1Op));
+        TL_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.TlOp));
         AT_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.AtOp));
         REM_FN = new FunctionValue(NativeFunctionLiteral.instance(NativeOp.RemOp));
     }

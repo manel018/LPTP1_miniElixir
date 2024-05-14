@@ -62,10 +62,8 @@ public class AssignExpr extends Expr {
                 }
                 
                 return listValue;
-
-            } else
-                throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
-     } else
-            throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
+            }
+        }
+        throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
 }
