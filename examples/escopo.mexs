@@ -1,0 +1,12 @@
+f1 = fn ->
+ puts("f1] x (antes): " <> str(x))
+ x = 5
+ puts("f1] x (depois): " <> str(x))
+end
+f2 = fn ->
+ x = 3
+ puts("f2] x (antes): " <> str(x))
+ f1()
+ puts("f2] x (depois): " <> str(x))
+end
+f2()

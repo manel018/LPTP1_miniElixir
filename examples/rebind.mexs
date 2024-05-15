@@ -1,0 +1,8 @@
+a = 3
+puts("fora do if] a (antes): " <> str(a))
+if :true do
+ puts("dentro do if] a (antes): " <> str(a))
+ a = 5
+ puts("dentro do if] a (depois): " <> str(a))
+end
+puts("fora do if] a (antes): " <> str(a))
