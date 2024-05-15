@@ -81,19 +81,19 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     public Value<?> invoke(Environment env){
         switch (this.op) {
             case NativeOp.PutsOp:
-                return putsFunction(env); 
+            return putsFunction(env); 
             case NativeOp.ReadOp: 
-                try{
-                    return readFunction(env); 
-                } catch (IOException e){
-                    return AtomValue.ERROR;
-                }
+            try{
+                return readFunction(env); 
+            } catch (IOException e){
+                return AtomValue.ERROR;
+            }
             case NativeOp.IntOp:
-                return intFunction(env);
+            return intFunction(env);
             case NativeOp.StrOp:
-                return strFunction(env);
+            return strFunction(env);
             case NativeOp.LengthOp:
-                return lengthFunction(env);
+            return lengthFunction(env);
             case NativeOp.HdOp:
                 return hdFunction(env);
             case NativeOp.TlOp:
@@ -185,6 +185,8 @@ public class NativeFunctionLiteral extends FunctionLiteral{
             Value<?> head = ((ListValue) val).value().head();
             if(head != null)
                 return head;
+            else
+                return AtomValue.ERROR;
         } 
         else if (val instanceof TupleValue){
             TupleItem item = ((TupleValue)val).value().head();
@@ -194,6 +196,8 @@ public class NativeFunctionLiteral extends FunctionLiteral{
                 head.add(item.value);
     
                 return new ListValue(head);
+            } else{
+                return AtomValue.ERROR;
             }
         }
         throw LanguageException.instance(0, LanguageException.Error.InvalidOperation);

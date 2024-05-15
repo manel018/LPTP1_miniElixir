@@ -1,11 +1,8 @@
 package interpreter.value;
 
-import interpreter.Interpreter;
-import interpreter.expr.Variable;
 import interpreter.literal.FunctionLiteral;
 import interpreter.literal.NativeFunctionLiteral;
 import interpreter.literal.NativeFunctionLiteral.NativeOp;
-import lexical.Token;;
 
 public class FunctionValue extends Value<FunctionLiteral>{
     private FunctionLiteral value;

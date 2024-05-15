@@ -38,8 +38,10 @@ public class AssignExpr extends Expr {
     }
 
     private Value<?> assignList(Environment env){
+        Value<?> value = rhs.expr(env);
+
         //As expresões devem ser listas
-        if(lhs instanceof ListExpr && rhs instanceof ListExpr){
+        if(lhs instanceof ListExpr && value instanceof ListValue){
             ListExpr listExpr = (ListExpr) lhs;
             ListValue listValue = (ListValue) rhs.expr(env);
 

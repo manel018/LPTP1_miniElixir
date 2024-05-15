@@ -8,21 +8,21 @@ Lista de observações e modificações a serem consideradas no código:
         ✅[CORRIGIDO] A referência a essa constante foi qualificada (o nome da classe e do atributo ao qual ela pertence está precedendo-a). Sua referência agora é Token.Type.STR .
     ❌ Falta implementar os métodos:
         - procRel()  ✅[CORRIGIDO] Método implementado.
-        - procRValue()
+        - procRValue()   ✅❓[CORRIGIDO] Método implementado. (Atribui-se o retorno de procNative() a uma exressão)
         - procList()   ✅[CORRIGIDO] Método implementado.
         - procTuple()   ✅[CORRIGIDO] Método implementado.
         - procIf()   ✅[CORRIGIDO] Método implementado.
         - procCond()   ✅[CORRIGIDO] Método implementado.
         - procFor()   ✅[CORRIGIDO] Método implementado.
-        - procFn()   
-        - procNative()
+        - procFn()   ✅❓[CORRIGIDO] Método implementado. (O retorno é uma classe criada sem seguir o diagrama de classes UML)
+        - procNative()   ✅❓[CORRIGIDO] Método implementado (Não se sabe se este método deve ou não retornar uma Variable)
         - procInvoke()   ✅[CORRIGIDO] Método implementado.
-
     
 
 - ListValue.java
     ❌ Não é necessário reimplementar o método toString() na classe ListValue, porque seu atributo value (da classe ListLiteral) já o implementou.
             ✅❓[CORRIGIDO] A chamada direta está sendo feita. (A versão anterior somente foi comentada)
+
 
 - BinaryExpr.java
     ❌ Falta implementar os métodos internos de operações relacionais:
@@ -58,29 +58,44 @@ Lista de observações e modificações a serem consideradas no código:
         - TupleItem   ✅[CORRIGIDO] Classe implementada.
         - ForExpr   ✅[CORRIGIDO] Classe implementada.
         - CondExpr   ✅[CORRIGIDO] Classe implementada.
-        - FunctionInvocationExpr   
+        - FunctionInvocationExpr   ✅❓[CORRIGIDO] Classe implementada. (Há duvidas quanto ao correto funcionamento dessa classe)
         - IfExpr   ✅[CORRIGIDO] Classe implementada.
+
+        - FnExpr ❗ Classe adicional implementada.
 
 
 - interpreter/literal
     ❌ Falta concluir as classes:
         - FunctionLiteral   ✅❓[CORRIGIDO] Classe finalizada (O método toString() é duvidoso).
-        - StandardFunctionLiteral   
-        - NativeFunctionLiteral
+        - StandardFunctionLiteral   ✅[CORRIGIDO] Classe finalizada.
+        - NativeFunctionLiteral   ✅❓[CORRIGIDO] Classe finalizada. (Um bloco estático está atribuindo os parâmetros como novas Variables e instanciando as funções nativas);
+
 
 - NativeFunctionLiteral.java
     ❌ Falta implementar o método invoke(), definindo as funções nativas:
-        - puts() 
-        - read()
-        - int()
-        - str()
-        - length()
-        - hd()
-        - tl()
-        - at()
-        - rem()
+        - puts()   ✅❓[CORRIGIDO] Função implementada. (Conferir se o retorno :ok está correto)
+        - read()   ✅❓[CORRIGIDO] Função implementada. (Há um tratamento de exceção obrigatório devido ao leitor do System.in)  
+        - int()   ✅[CORRIGIDO] Função implementada.
+        - str()   ✅[CORRIGIDO] Função implementada.
+        - length()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
+        - hd()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
+                     (Para executar o código exemplo, implementou-se o retorno do átomo :error ao invés de uma exceção.)
+        - tl()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
+        - at()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
+        - rem()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
     ❌ Falta identificar a linha onde acontecem os erros das funções.
+        ✅❓[CORRIGIDO] Tratado na classe FunctionInvocationExpr.
+
+- FunctionInvocationExpr.java
+    ❗ A exceção capturada do método invoke() está sendo relançada com a especificação da linha (já que não é possível obter tal informação dentro de invoke()),
+       porém a linha só corresponde à função mais externa, pois ela captura e "sombreia" o rastro das outras exceções mais internas.
+
 
 - interpreter/value
     ❌ Falta implementar a classe FunctionValue.
         ✅[CORRIGIDO] A classe foi criada.
+
+
+- Interpreter.java
+    ❗ A variável 'globals' está amarrando estaticamente os nomes das funções nativas a seus respectivos valores (FunctionValue).
+    
