@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interpreter.Environment;
-import interpreter.literal.StandardFunctionLiteral;
-import interpreter.value.FunctionValue;
 import interpreter.value.Value;
 
 public class FunctionInvocationExpr extends Expr{
