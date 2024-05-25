@@ -43,7 +43,7 @@ Lista de observações e modificações a serem consideradas no código:
         - divOp()   ✅[CORRIGIDO] Método implementado.
 
 - AssignExpr.java
-    ❌ Falta implementar a atribuição de variáveis com sintaxe de listas.
+    ❌ Falta implementar a atribuição de variáveis com sintaxe de listas (desempacotamento).
         ✅[CORRIGIDO] O recurso foi implementado.
 
 - miex.java
