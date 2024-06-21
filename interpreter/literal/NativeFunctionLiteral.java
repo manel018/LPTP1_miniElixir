@@ -80,27 +80,27 @@ public class NativeFunctionLiteral extends FunctionLiteral{
 
     public Value<?> invoke(Environment env){
         switch (this.op) {
-            case NativeOp.PutsOp:
+            case PutsOp:
             return putsFunction(env); 
-            case NativeOp.ReadOp: 
+            case ReadOp: 
             try{
                 return readFunction(env); 
             } catch (IOException e){
                 return AtomValue.ERROR;
             }
-            case NativeOp.IntOp:
+            case IntOp:
             return intFunction(env);
-            case NativeOp.StrOp:
+            case StrOp:
             return strFunction(env);
-            case NativeOp.LengthOp:
+            case LengthOp:
             return lengthFunction(env);
-            case NativeOp.HdOp:
+            case HdOp:
                 return hdFunction(env);
-            case NativeOp.TlOp:
+            case TlOp:
                 return tlFunction(env);
-            case NativeOp.AtOp:
+            case AtOp:
                 return atFunction(env);
-            case NativeOp.RemOp:
+            case RemOp:
                 return remFunction(env);
             default:
                 break;

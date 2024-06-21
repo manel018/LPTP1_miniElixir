@@ -95,7 +95,7 @@ public class SyntaticAnalysis {
     }
 
     private void advance() {
-        System.out.println("Found " + current);
+        //System.out.println("Found " + current);
         previous = current;
         current = lex.nextToken();
     }
