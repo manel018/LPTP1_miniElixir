@@ -35,8 +35,8 @@ public class FunctionInvocationExpr extends Expr{
                 Environment newEnv = new Environment(env);
                 int index = 0;
 
-                for(Expr arg : args){
-                    Value<?> argValue = arg.expr(env);
+                for(Expr argExpr : args){
+                    Value<?> argValue = argExpr.expr(env);
                     Variable var = params.get(index);
                     
                     var.setValue(newEnv, argValue);
