@@ -32,10 +32,10 @@ public class StandardFunctionLiteral extends FunctionLiteral{
         if (this == obj){
             return true;
         } else if (obj instanceof StandardFunctionLiteral){
-            StandardFunctionLiteral standOp = (StandardFunctionLiteral) obj;
+            StandardFunctionLiteral standFunc = (StandardFunctionLiteral) obj;
 
-            return (getParams().equals(standOp.getParams())
-                && this.expr.equals(standOp.expr));
+            return (getParams().equals(standFunc.getParams())
+                && this.expr.equals(standFunc.expr));
         } else
             return false;
     }

@@ -1,11 +1,10 @@
 package interpreter.literal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import error.LanguageException;
 import interpreter.Environment;
@@ -34,8 +33,9 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     
     private NativeOp op;
     private static Map<NativeOp,NativeFunctionLiteral> instances =
-    new HashMap<NativeOp,NativeFunctionLiteral>();
-    
+        new HashMap<NativeOp,NativeFunctionLiteral>();
+    private static Scanner input = new Scanner(new InputStreamReader(System.in));
+
     static{
         Variable param1 = new Variable(new Token("param1", null, null));
         Variable param2 = new Variable(new Token("param2", null, null));
@@ -81,19 +81,15 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     public Value<?> invoke(Environment env){
         switch (this.op) {
             case PutsOp:
-            return putsFunction(env); 
+                return putsFunction(env); 
             case ReadOp: 
-            try{
                 return readFunction(env); 
-            } catch (IOException e){
-                return AtomValue.ERROR;
-            }
             case IntOp:
-            return intFunction(env);
+                return intFunction(env);
             case StrOp:
-            return strFunction(env);
+                return strFunction(env);
             case LengthOp:
-            return lengthFunction(env);
+                return lengthFunction(env);
             case HdOp:
                 return hdFunction(env);
             case TlOp:
@@ -115,39 +111,24 @@ public class NativeFunctionLiteral extends FunctionLiteral{
         return result;
     }
 
-    @Override
-    public boolean equals(Object obj){
-        if (this == obj){
-            return true;
-        } else if (obj instanceof NativeFunctionLiteral){
-            NativeFunctionLiteral natOp = (NativeFunctionLiteral) obj;
-            
-            return (getParams().equals(natOp.getParams())
-                && this.op.equals(natOp.op));
-        } else{
-            return false;
-        }
-    }
 
     private Value<?> putsFunction(Environment env){
-        Variable param = instances.get(op).getParams().get(0);
+        Variable param = instances.get(op).getParams().get(0); //Obtenha o primeiro parâmetro
         System.out.println(param.expr(env));
 
         return AtomValue.OK;  
     }
 
-    private Value<?> readFunction(Environment env) throws IOException{
-        Variable param = instances.get(op).getParams().get(0);
-        InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(input);
-
+    private Value<?> readFunction(Environment env) {
+        Variable param = instances.get(op).getParams().get(0); //Obtenha o primeiro parâmetro
         System.out.print(param.expr(env));
-        
-        return new StringValue(reader.readLine());
+
+        String line = input.nextLine();
+        return new StringValue(line);
     }
 
     private Value<?> intFunction(Environment env){
-        Variable param = instances.get(op).getParams().get(0);
+        Variable param = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
         Value<?> val = param.expr(env);
 
         if(val instanceof StringValue)
@@ -157,14 +138,14 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     }
 
     private Value<?> strFunction(Environment env){
-        Variable param = instances.get(op).getParams().get(0);
+        Variable param = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
         Value<?> val = param.expr(env);
 
         return new StringValue(val.toString());
     }
 
     private Value<?> lengthFunction(Environment env){
-        Variable param = instances.get(op).getParams().get(0);
+        Variable param = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
         Value<?> val = param.expr(env);
 
         if(val instanceof ListValue){
@@ -178,7 +159,7 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     }
 
     private Value<?> hdFunction(Environment env){
-        Variable param = instances.get(op).getParams().get(0);
+        Variable param = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
         Value<?> val = param.expr(env);
 
         if(val instanceof ListValue){
@@ -204,7 +185,7 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     }
 
     private Value<?> tlFunction(Environment env){
-        Variable param = instances.get(op).getParams().get(0);
+        Variable param = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
         Value<?> val = param.expr(env);
 
         if(val instanceof ListValue){
@@ -231,8 +212,8 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     }
 
     private Value<?> atFunction(Environment env){
-        Variable param1 = instances.get(op).getParams().get(0);
-        Variable param2 = instances.get(op).getParams().get(1);
+        Variable param1 = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
+        Variable param2 = instances.get(op).getParams().get(1);  //Obtenha o segundo parâmetro
         Value<?> val1 = param1.expr(env);
         Value<?> val2 = param2.expr(env);
 
@@ -255,8 +236,8 @@ public class NativeFunctionLiteral extends FunctionLiteral{
     }
 
     private Value<?> remFunction(Environment env){
-        Variable param1 = instances.get(op).getParams().get(0);
-        Variable param2 = instances.get(op).getParams().get(1);
+        Variable param1 = instances.get(op).getParams().get(0);  //Obtenha o primeiro parâmetro
+        Variable param2 = instances.get(op).getParams().get(1);  //Obtenha o primeiro parâmetro
         Value<?> val1 = param1.expr(env);
         Value<?> val2 = param2.expr(env);
 

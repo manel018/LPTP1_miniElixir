@@ -82,28 +82,26 @@ public class BinaryExpr extends Expr {
         }
     }
 
+    // Retorna o valor do último termo avaliado na expressão
     private Value<?> andOp(Environment env) {
-        Value<?> v1 = right.expr(env);
-        Value<?> v2 = left.expr(env);
+        Value<?> leftValue = left.expr(env);
 
-        // Retorna o valor do último termo avaliado na expressão
-        // Se v1 for falso, retorna v1
-        if(!v1.eval())
-            return v1;
-        else    // Se v1 for verdadeiro, retorna v2
-            return v2;
+        // Se o valor do lado esquerdo for falso, retorne-o
+        if(!leftValue.eval())
+            return leftValue;
+        else  // Caso contrário, avalie e retorne o lado direito
+            return right.expr(env);
     }
 
+    // Retorna o valor do último termo avaliado na expressão
     private Value<?> orOp(Environment env) {
-        Value<?> v1 = right.expr(env);
-        Value<?> v2 = left.expr(env);
+        Value<?> leftValue = left.expr(env);
 
-        // Retorna o valor do último termo avaliado na expressão
-        // Se v1 for verdadeiro, retorna v1
-        if(v1.eval())
-            return v1;
-        else    // Se v1 for falso, retorna v2
-            return v2;
+        // Se o valor do lado esquerdo for verdadeiro, retorne-o
+        if(leftValue.eval())
+            return leftValue;
+        else  // Caso contrário, avalie e retorne o lado direito
+            return right.expr(env);
     }
 
     private Value<?> equalOp(Environment env) {

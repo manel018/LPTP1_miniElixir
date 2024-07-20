@@ -52,7 +52,7 @@ Lista de observações e modificações a serem consideradas no código:
         
 
 - interpreter/expr
-    ❌ Falta implementar das classes:
+    ❌ Falta implementar as classes:
         - ListExpr ✅[CORRIGIDO] Classe implementada.
         - TupleExpr   ✅[CORRIGIDO] Classe implementada.
         - TupleItem   ✅[CORRIGIDO] Classe implementada.
@@ -74,7 +74,7 @@ Lista de observações e modificações a serem consideradas no código:
 - NativeFunctionLiteral.java
     ❌ Falta implementar o método invoke(), definindo as funções nativas:
         - puts()   ✅❓[CORRIGIDO] Função implementada. (Conferir se o retorno :ok está correto)
-        - read()   ✅❓[CORRIGIDO] Função implementada. (Há um tratamento de exceção obrigatório devido ao leitor do System.in)  
+        - read()   ✅[CORRIGIDO] Função implementada. 
         - int()   ✅[CORRIGIDO] Função implementada.
         - str()   ✅[CORRIGIDO] Função implementada.
         - length()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
@@ -83,12 +83,6 @@ Lista de observações e modificações a serem consideradas no código:
         - tl()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
         - at()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
         - rem()   ✅❓[CORRIGIDO] Função implementada. (Exceção pode ser lançada)
-    ❌ Falta identificar a linha onde acontecem os erros das funções.
-        ✅❓[CORRIGIDO] Tratado na classe FunctionInvocationExpr.
-
-- FunctionInvocationExpr.java
-    ❗ A exceção capturada do método invoke() está sendo relançada com a especificação da linha (já que não é possível obter tal informação dentro de invoke()),
-       porém a linha só corresponde à função mais externa, pois ela captura e "sombreia" o rastro das outras exceções mais internas.
 
 
 - interpreter/value

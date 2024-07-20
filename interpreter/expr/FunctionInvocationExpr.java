@@ -24,10 +24,10 @@ public class FunctionInvocationExpr extends Expr{
     }
     
     public Value<?> expr(Environment env){
-        Value<?> refValue = expr.expr(env);
+        Value<?> referenceValue = expr.expr(env);
 
-        if(refValue instanceof FunctionValue){
-            FunctionLiteral function = ((FunctionValue) refValue).value();
+        if(referenceValue instanceof FunctionValue){
+            FunctionLiteral function = ((FunctionValue) referenceValue).value();
             List<Variable> params = function.getParams();
             
             // Amarrando os argumentos aos parâmetros da função
@@ -42,11 +42,8 @@ public class FunctionInvocationExpr extends Expr{
                     var.setValue(newEnv, argValue);
                     index++;
                 }
-                try{
-                    return function.invoke(newEnv);
-                } catch(LanguageException e){
-                    throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
-                }
+
+                return function.invoke(newEnv);
             }
         } 
         // else

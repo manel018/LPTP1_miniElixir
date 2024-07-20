@@ -18,53 +18,41 @@ public class AssignExpr extends Expr {
     }
     
     public Value<?> expr(Environment env) {
-        Value<?> v = null; 
-
-        if (lhs instanceof Variable)
-            v = assignVar(env);
-        else
-            v = assignList(env);
-
-        return v;
+        return assignment(env, lhs, rhs.expr(env));    
     }
 
-    private Value<?> assignVar(Environment env){
-        Variable var = (Variable) lhs;
-        Value<?> value = rhs.expr(env);
+    private Value<?> assignment(Environment env, Expr leftExpr, Value<?> value){
+        if (leftExpr instanceof Variable){
+            Variable var = (Variable) leftExpr;
+            return assignVar(env, var, value);
+        }
+        else
+            return assignList(env, leftExpr, value);
+    }
 
+    private Value<?> assignVar(Environment env, Variable var, Value<?> value){
         var.setValue(env, value);
-
         return value;
     }
 
-    private Value<?> assignList(Environment env){
-        Value<?> value = rhs.expr(env);
+    private Value<?> assignList(Environment env, Expr leftExpr, Value<?> value){
+        //A expresão à esquerda e o valor à direita devem ser listas
+        if(leftExpr instanceof ListExpr && value instanceof ListValue){
+            ListExpr leftList = (ListExpr) leftExpr;
+            ListValue rightList = (ListValue) value;
 
-        //As expresões devem ser listas
-        if(lhs instanceof ListExpr && value instanceof ListValue){
-            ListExpr listExpr = (ListExpr) lhs;
-            ListValue listValue = (ListValue) rhs.expr(env);
-
-            int size = listExpr.getList().size();
+            int size = leftList.getList().size();
             int i = 0;
 
             // As listas devem ter o mesmo tamanho
-            if(listValue.value().size() == size){
-                
-                for(Expr elementExpr: listExpr.getList()){
-                    
-                    // Todos elementos de lhs devem ser instâncias de Variable
-                    if(elementExpr instanceof Variable){
-                        Variable var = (Variable) elementExpr;
-
-                        var.setValue(env, listValue.value().get(i));
-                    } else
-                        throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
+            if(rightList.value().size() == size){
+                for(Expr elementExpr : leftList.getList()){
+                    //Chame recursivamente a função de atribuição
+                    assignment(env, elementExpr, rightList.value().get(i));
                     i++;
                 }
-                
-                return listValue;
             }
+            return value;
         }
         throw LanguageException.instance(super.getLine(), LanguageException.Error.InvalidOperation);
     }
