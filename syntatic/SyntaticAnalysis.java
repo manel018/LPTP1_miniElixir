@@ -72,6 +72,9 @@ import interpreter.expr.TupleExpr;
 import interpreter.expr.UnaryExpr;
 import interpreter.expr.UnlessExpr;
 import interpreter.expr.Variable;
+import interpreter.literal.NativeFunctionLiteral;
+import interpreter.literal.NativeFunctionLiteral.NativeOp;
+import interpreter.value.FunctionValue;
 import interpreter.value.Value;
 import lexical.LexicalAnalysis;
 import lexical.Token;
@@ -540,12 +543,45 @@ public class SyntaticAnalysis {
     }
 
     // <native> ::= puts | read | int | str | length | hd | tl | at | rem
-    private Variable procNative() {
-        if (!match(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
+    private ConstExpr procNative() {
+        NativeOp op = null;
+        if (match(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
+            switch (previous.type) {
+                case PUTS:
+                    op = NativeOp.PutsOp;
+                    break;
+                case READ:
+                    op = NativeOp.ReadOp;
+                    break;
+                case INT:
+                    op = NativeOp.IntOp;
+                    break;
+                case STR:
+                    op = NativeOp.StrOp;
+                    break;
+                case LENGTH:
+                    op = NativeOp.LengthOp;
+                    break;
+                case HD:
+                    op = NativeOp.HdOp;
+                    break;
+                case TL:
+                    op = NativeOp.TlOp;
+                    break;
+                case AT:
+                    op = NativeOp.AtOp;
+                    break;
+                case REM:
+                    op = NativeOp.RemOp;
+                    break;
+                default:
+                    throw new RuntimeException("Unreachable");
+            }               
+        } else{
             reportError();
-        } 
-        Variable var = new Variable(previous);
-        return var;
+        }
+        NativeFunctionLiteral func = NativeFunctionLiteral.instance(op);
+        return new ConstExpr(previous.line, new FunctionValue(func));
     }
 
     // <invoke> ::= [ '(' [ <expr> { ',' <expr> } ] ')' ]

@@ -74,7 +74,7 @@ public class miex {
                 System.out.println(value);
         } catch (LanguageException e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

@@ -1,0 +1,12 @@
+puts(length)
+
+if :true do
+    puts(length)
+    puts(length([1,2,3]))
+
+    length = "Um valor qualquer"
+
+    puts(length)
+end
+
+puts(length)
