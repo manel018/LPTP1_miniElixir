@@ -109,10 +109,10 @@ public class BinaryExpr extends Expr {
         Value<?> v2 = right.expr(env);
 
         // Os tipos devem ser iguais
-        if(v1.getClass() == v2.getClass() && v1.equals(v2))
-            return AtomValue.TRUE;
-        else
-            return AtomValue.FALSE;
+        if(v1.getClass() == v2.getClass() && v1.equals(v2)){
+                return AtomValue.TRUE;
+        }
+        return AtomValue.FALSE;
     }
 
     private Value<?> notEqualOp(Environment env) {

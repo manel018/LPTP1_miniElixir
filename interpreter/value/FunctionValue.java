@@ -53,9 +53,10 @@ public class FunctionValue extends Value<FunctionLiteral>{
     public boolean equals(Object obj){
         if(this == obj){
             return true;
-        } else{
+        } else if(obj instanceof FunctionValue){
+            return this.value.equals(((FunctionValue)obj).value());
+        } else
             return false;
-        }
     }
 
     @Override

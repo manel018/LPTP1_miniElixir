@@ -26,18 +26,4 @@ public class StandardFunctionLiteral extends FunctionLiteral{
         result = prime * result + this.expr.hashCode();
         return result;
     }
-
-    @Override
-    public boolean equals(Object obj){
-        if (this == obj){
-            return true;
-        } else if (obj instanceof StandardFunctionLiteral){
-            StandardFunctionLiteral standFunc = (StandardFunctionLiteral) obj;
-
-            return (getParams().equals(standFunc.getParams())
-                && this.expr.equals(standFunc.expr));
-        } else
-            return false;
-    }
-
 }

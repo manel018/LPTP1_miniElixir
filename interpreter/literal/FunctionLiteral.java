@@ -30,5 +30,11 @@ public abstract class FunctionLiteral{
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj){
+        return this == obj;
+    }
+
+
     public abstract Value<?> invoke(Environment env);
 }
