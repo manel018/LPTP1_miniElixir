@@ -9,7 +9,8 @@ public class LanguageException extends RuntimeException {
         UnexpectedEOF("Fim de arquivo inesperado", 0),
         UnexpectedLexeme("Lexema não esperado [%s]", 1),
         UndeclaredVariable("Variável não declarada [%s]", 1),
-        InvalidOperation("Operação inválida", 0);
+        InvalidOperation("Operação inválida", 0),
+        WrongArgumentsNumber("Número de argumentos incorreto. Fornecido: [%s]. Esperado: [%s] ", 2);
 
         public final String msg;
         public final int args;

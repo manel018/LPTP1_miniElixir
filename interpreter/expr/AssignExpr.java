@@ -36,7 +36,7 @@ public class AssignExpr extends Expr {
     }
 
     private Value<?> assignList(Environment env, Expr leftExpr, Value<?> value){
-        //A expresão à esquerda e o valor à direita devem ser listas
+        // Tanto a expresão à esquerda quanto o valor à direita devem ser listas
         if(leftExpr instanceof ListExpr && value instanceof ListValue){
             ListExpr leftList = (ListExpr) leftExpr;
             ListValue rightList = (ListValue) value;
@@ -47,7 +47,7 @@ public class AssignExpr extends Expr {
             // As listas devem ter o mesmo tamanho
             if(rightList.value().size() == size){
                 for(Expr elementExpr : leftList.getList()){
-                    //Chame recursivamente a função de atribuição
+                    // Chame recursivamente a função de atribuição
                     assignment(env, elementExpr, rightList.value().get(i));
                     i++;
                 }

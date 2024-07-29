@@ -4,7 +4,7 @@ if :true do
     puts(length)
     puts(length([1,2,3]))
 
-    length = "Um valor qualquer"
+    length = "Um valor qualquer"            # Deve gerar exceção!
 
     puts(length)
 end

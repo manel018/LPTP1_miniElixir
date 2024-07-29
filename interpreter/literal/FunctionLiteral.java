@@ -23,14 +23,6 @@ public abstract class FunctionLiteral{
     }
 
     @Override
-    public String toString(){
-        StringBuffer sb = new StringBuffer();
-        sb.append("fn<std>");
-
-        return sb.toString();
-    }
-
-    @Override
     public boolean equals(Object obj){
         return this == obj;
     }

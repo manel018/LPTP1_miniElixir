@@ -42,7 +42,7 @@ public class miex {
                 System.out.println();
                 break;
             }
-            // TODO: Voltar output para false ao entregar o progrAma
+            // TODO: Voltar output para false ao entregar o programa
             run(new ByteArrayInputStream(line.getBytes()), true);
         }
     }
@@ -74,7 +74,7 @@ public class miex {
                 System.out.println(value);
         } catch (LanguageException e) {
             System.out.println(e.getMessage());
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

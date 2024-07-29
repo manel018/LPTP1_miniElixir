@@ -44,6 +44,8 @@ public class FunctionInvocationExpr extends Expr{
                 }
 
                 return function.invoke(newEnv);
+            } else{
+                throw LanguageException.instance(super.getLine(), LanguageException.Error.WrongArgumentsNumber, Integer.toString(args.size()), Integer.toString(params.size()));
             }
         } 
         // else

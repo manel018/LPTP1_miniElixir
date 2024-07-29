@@ -82,7 +82,7 @@ public class BinaryExpr extends Expr {
         }
     }
 
-    // Retorna o valor do último termo avaliado na expressão
+    // Retorna o valor do último termo avaliado na expressão de AND
     private Value<?> andOp(Environment env) {
         Value<?> leftValue = left.expr(env);
 
@@ -93,7 +93,7 @@ public class BinaryExpr extends Expr {
             return right.expr(env);
     }
 
-    // Retorna o valor do último termo avaliado na expressão
+    // Retorna o valor do último termo avaliado na expressão de OR
     private Value<?> orOp(Environment env) {
         Value<?> leftValue = left.expr(env);
 

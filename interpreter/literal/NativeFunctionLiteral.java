@@ -19,55 +19,68 @@ import lexical.Token;
 
 public class NativeFunctionLiteral extends FunctionLiteral{
 
-    public static enum NativeOp{
-        PutsOp,
-        ReadOp,
-        IntOp,
-        StrOp,
-        LengthOp,
-        HdOp,
-        TlOp,
-        AtOp,
-        RemOp
+    public static enum Op {
+        Puts("puts"),
+        Read("read"),
+        Int("int"),
+        Str("str"),
+        Length("length"),
+        Hd("hd"),
+        Tl("tl"),
+        At("at"),
+        Rem("rem");
+
+        private String name;
+
+        Op(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
     
-    private NativeOp op;
-    private static Map<NativeOp,NativeFunctionLiteral> instances =
-        new HashMap<NativeOp,NativeFunctionLiteral>();
+    private NativeFunctionLiteral.Op op;
     private static Scanner input = new Scanner(new InputStreamReader(System.in));
+    private static Map<Op,NativeFunctionLiteral> instances;
 
     static{
+        // Inicialização do mapa de funções nativas
+        instances = new HashMap<Op,NativeFunctionLiteral>();
+        
+        // Amarração dos parâmetros formais às funções nativas
         Variable param1 = new Variable(new Token("param1", null, null));
         Variable param2 = new Variable(new Token("param2", null, null));
 
-        NativeFunctionLiteral putsFn = NativeFunctionLiteral.instance(NativeOp.PutsOp);
+        NativeFunctionLiteral putsFn = NativeFunctionLiteral.instance(Op.Puts);
         putsFn.addParam(param1);
-        NativeFunctionLiteral readFn = NativeFunctionLiteral.instance(NativeOp.ReadOp);
+        NativeFunctionLiteral readFn = NativeFunctionLiteral.instance(Op.Read);
         readFn.addParam(param1);
-        NativeFunctionLiteral intFn = NativeFunctionLiteral.instance(NativeOp.IntOp);
+        NativeFunctionLiteral intFn = NativeFunctionLiteral.instance(Op.Int);
         intFn.addParam(param1);
-        NativeFunctionLiteral strFn = NativeFunctionLiteral.instance(NativeOp.StrOp);
+        NativeFunctionLiteral strFn = NativeFunctionLiteral.instance(Op.Str);
         strFn.addParam(param1);
-        NativeFunctionLiteral lengthFn = NativeFunctionLiteral.instance(NativeOp.LengthOp);
+        NativeFunctionLiteral lengthFn = NativeFunctionLiteral.instance(Op.Length);
         lengthFn.addParam(param1);
-        NativeFunctionLiteral hdFn = NativeFunctionLiteral.instance(NativeOp.HdOp);
+        NativeFunctionLiteral hdFn = NativeFunctionLiteral.instance(Op.Hd);
         hdFn.addParam(param1);
-        NativeFunctionLiteral tlFn = NativeFunctionLiteral.instance(NativeOp.TlOp);
+        NativeFunctionLiteral tlFn = NativeFunctionLiteral.instance(Op.Tl);
         tlFn.addParam(param1);
-        NativeFunctionLiteral atFn = NativeFunctionLiteral.instance(NativeOp.AtOp);
+        NativeFunctionLiteral atFn = NativeFunctionLiteral.instance(Op.At);
         atFn.addParam(param1);
         atFn.addParam(param2);
-        NativeFunctionLiteral remFn = NativeFunctionLiteral.instance(NativeOp.RemOp);
+        NativeFunctionLiteral remFn = NativeFunctionLiteral.instance(Op.Rem);
         remFn.addParam(param1);
         remFn.addParam(param2);
     }
 
-    public NativeFunctionLiteral(NativeOp op){
+    public NativeFunctionLiteral(Op op){
         super();
         this.op = op;
     }
 
-    public static NativeFunctionLiteral instance(NativeOp op){
+    public static NativeFunctionLiteral instance(Op op){
         // Se a função nativa não existir, cria uma nova
         NativeFunctionLiteral natFn = instances.get(op);
         if(natFn == null){
@@ -80,23 +93,23 @@ public class NativeFunctionLiteral extends FunctionLiteral{
 
     public Value<?> invoke(Environment env){
         switch (this.op) {
-            case PutsOp:
+            case Puts:
                 return putsFunction(env); 
-            case ReadOp: 
+            case Read:
                 return readFunction(env); 
-            case IntOp:
+            case Int:
                 return intFunction(env);
-            case StrOp:
+            case Str:
                 return strFunction(env);
-            case LengthOp:
+            case Length:
                 return lengthFunction(env);
-            case HdOp:
+            case Hd:
                 return hdFunction(env);
-            case TlOp:
+            case Tl:
                 return tlFunction(env);
-            case AtOp:
+            case At:
                 return atFunction(env);
-            case RemOp:
+            case Rem:
                 return remFunction(env);
             default:
                 break;
@@ -249,6 +262,10 @@ public class NativeFunctionLiteral extends FunctionLiteral{
             } 
         } 
         throw LanguageException.instance(0, LanguageException.Error.InvalidOperation);
+    }
+
+    public String toString() {
+        return "fn<" + this.op.getName() + ">";
     }
 
 }

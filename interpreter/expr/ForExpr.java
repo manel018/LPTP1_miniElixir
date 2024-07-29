@@ -47,7 +47,7 @@ public class ForExpr extends Expr{
                     result.add(body.expr(newEnv));
             }
             return new ListValue(result);
-        } // TODO: Pode haver TUPLAS, que também são iteráveis
+        } 
         else
             throw LanguageException.instance(super.getLine(),LanguageException.Error.InvalidOperation);
     }

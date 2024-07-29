@@ -19,6 +19,10 @@ public class StandardFunctionLiteral extends FunctionLiteral{
         return expr.expr(env);
     }
 
+    public String toString() {
+        return "fn<std>";
+    }
+
     @Override
     public int hashCode(){
         final int prime = 31;

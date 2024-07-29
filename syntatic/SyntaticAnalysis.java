@@ -73,7 +73,6 @@ import interpreter.expr.UnaryExpr;
 import interpreter.expr.UnlessExpr;
 import interpreter.expr.Variable;
 import interpreter.literal.NativeFunctionLiteral;
-import interpreter.literal.NativeFunctionLiteral.NativeOp;
 import interpreter.value.FunctionValue;
 import interpreter.value.Value;
 import lexical.LexicalAnalysis;
@@ -125,7 +124,7 @@ public class SyntaticAnalysis {
     private boolean checkExpr(){
         return check(NOT, SUB, OPEN_PAR, INTEGER_LITERAL, STRING_LITERAL,
                     ATOM_LITERAL, OPEN_BRA, OPEN_CUR, IF, UNLESS, COND, FOR,
-                    FN, PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM, NAME);
+                    FN, PUTS, READ, INT, STR, LENGTH, HD, TL, AT, REM, NAME);
     }
 
     private boolean match(Token.Type ...types) {
@@ -392,7 +391,7 @@ public class SyntaticAnalysis {
             expr = procFor();
         } else if (check(FN)) {
             expr = procFn();
-        } else if (check(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
+        } else if (check(PUTS, READ, INT, STR, LENGTH, HD, TL, AT, REM)) {
             expr = procNative();
         } else if (check(NAME)) {
             expr = procName();
@@ -543,45 +542,51 @@ public class SyntaticAnalysis {
     }
 
     // <native> ::= puts | read | int | str | length | hd | tl | at | rem
-    private ConstExpr procNative() {
-        NativeOp op = null;
-        if (match(PUTS, READ, INT, Token.Type.STR, LENGTH, HD, TL, AT, REM)) {
+    private Expr procNative() {
+        Expr expr = null;
+        if (match(PUTS, READ, INT, STR, LENGTH, HD, TL, AT, REM)) {
+            int line = previous.line;
+
+            NativeFunctionLiteral.Op op = null;
             switch (previous.type) {
                 case PUTS:
-                    op = NativeOp.PutsOp;
+                    op = NativeFunctionLiteral.Op.Puts;
                     break;
                 case READ:
-                    op = NativeOp.ReadOp;
+                    op = NativeFunctionLiteral.Op.Read;
                     break;
                 case INT:
-                    op = NativeOp.IntOp;
+                    op = NativeFunctionLiteral.Op.Int;
                     break;
                 case STR:
-                    op = NativeOp.StrOp;
+                    op = NativeFunctionLiteral.Op.Str;
                     break;
                 case LENGTH:
-                    op = NativeOp.LengthOp;
+                    op = NativeFunctionLiteral.Op.Length;
                     break;
                 case HD:
-                    op = NativeOp.HdOp;
+                    op = NativeFunctionLiteral.Op.Hd;
                     break;
                 case TL:
-                    op = NativeOp.TlOp;
+                    op = NativeFunctionLiteral.Op.Tl;
                     break;
                 case AT:
-                    op = NativeOp.AtOp;
+                    op = NativeFunctionLiteral.Op.At;
                     break;
                 case REM:
-                    op = NativeOp.RemOp;
+                    op = NativeFunctionLiteral.Op.Rem;
                     break;
                 default:
                     throw new RuntimeException("Unreachable");
-            }               
+            }  
+
+            NativeFunctionLiteral nfliteral = NativeFunctionLiteral.instance(op);
+            expr = new ConstExpr(line, new FunctionValue(nfliteral));             
         } else{
             reportError();
         }
-        NativeFunctionLiteral func = NativeFunctionLiteral.instance(op);
-        return new ConstExpr(previous.line, new FunctionValue(func));
+
+        return expr;
     }
 
     // <invoke> ::= [ '(' [ <expr> { ',' <expr> } ] ')' ]
